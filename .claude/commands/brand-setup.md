@@ -57,7 +57,7 @@ Create `projects/[slug]/brand-demo.html` — a single self-contained HTML file t
 - Uses all 12 components from the component library (ValueAccordion, FeatureRevealCard, StepTimeline, ScrollCardRow, TabbedContent, StatTicker, SplitValuePanel, ComparisonTable, IconFeatureGrid, HeroSlide, PullQuote, CTABand)
 - Applies the new brand tokens throughout
 - Uses real content derived from the company's website — actual product names, real value propositions, real market positioning. No Lorem Ipsum, no generic filler.
-- Follows the layout structure of the ai-permissions-security.html demo (scrolling landing page with multiple stacked sections, sticky nav, hero at top, components in logical order, CTA at bottom)
+- Uses this layout structure: sticky nav at top → full-width hero section → StatTicker bar → SplitValuePanel → FeatureRevealCard grid → TabbedContent → StepTimeline → ComparisonTable → IconFeatureGrid → ScrollCardRow → ValueAccordion → PullQuote → CTABand at bottom. Each section has a generous heading, eyebrow label, and real copy before the component.
 - Is fully self-contained: no external CSS/JS imports except Google Fonts
 
 ## Step 6 — Output summary
