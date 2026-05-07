@@ -15,16 +15,28 @@ Output: self-contained single-file HTML decks that open directly in a browser �
 
 ## Quickstart
 
-**1. Use this template**
+**1. Create your own copy from this template**
 
-Click **Use this template** on GitHub to create your own copy, then clone it:
+On GitHub, click the green **Use this template** button → **Create a new repository**. Pick any name you want (e.g. `acme-brand-studio`, `my-decks`, etc.) and create it under your own GitHub account.
+
+**2. Clone the new repo you just created**
+
+Use the URL of *your* new repo, not this one:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/claude-brand-studio
-cd claude-brand-studio
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME
+cd YOUR_REPO_NAME
 ```
 
-**2. Set up your brand**
+**3. Make the setup script executable**
+
+Only needed once, right after cloning:
+
+```bash
+chmod +x brand-setup.sh
+```
+
+**4. Set up your brand**
 
 ```bash
 ./brand-setup.sh
@@ -39,7 +51,7 @@ Claude will:
 
 Open the demo in your browser. If anything looks off, stay in Claude Code and describe the change — Claude uses `/brand-refine` to update the tokens and regenerate the demo.
 
-**3. Build a presentation**
+**5. Build a presentation**
 
 Once your brand is ready, describe what you need in Claude Code:
 
