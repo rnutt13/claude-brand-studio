@@ -3,16 +3,23 @@
 These rules apply to every HTML file created in this project.
 
 ## Non-negotiable rules
-- **No emojis anywhere** — not in copy, not as icons, not as placeholders. Use real logos or CSS shapes.
-- **No Bootstrap, Tailwind, or any CSS framework** — pure CSS with custom properties only.
-- **No Lorem Ipsum** — all copy must be real, contextually appropriate content for the brand.
-- **No external JS libraries** — vanilla JS only.
-- **No generic AI-looking UI** — no cards with three bullet points and a blue gradient on every page.
-- **Single self-contained HTML files** — no imports, no bundlers, no server required. Open directly in browser.
-- Google Fonts `@import` is allowed (it's a stylesheet link, not a framework).
+- **No emojis anywhere.** Not in copy, not as icons, not as placeholders. Use real logos or CSS shapes.
+- **No em-dashes or en-dashes in copy.** Use a period, comma, colon, or rephrase. Em-dashes are an AI-writing tell.
+- **No eyebrow labels by default.** No 12px uppercase tracked-out labels above section titles. Lead with the headline. Only add a small label if the brand explicitly calls for one.
+- **No Bootstrap, Tailwind, or any CSS framework.** Pure CSS with custom properties only.
+- **No Lorem Ipsum.** All copy must be real, contextually appropriate content for the brand.
+- **No external JS libraries.** Vanilla JS only.
+- **No generic AI-looking UI.** No "three cards with three bullet points and a blue gradient on every page" layouts.
+- **Single self-contained HTML files.** No imports, no bundlers, no server required. Open directly in browser.
+- Google Fonts `@import` is allowed (it's a stylesheet link, not a framework). Local fonts loaded via `@font-face` from `assets/fonts/` are also allowed but rarely needed.
 
 ## Purpose
-These HTML files replace PowerPoint/slide decks for customer presentations. Each file is a branded experience for a specific company or pitch. Describe what you need; Claude picks components that match whether it's more slide-like (full-viewport sections) or content-heavy (scrolling page).
+These HTML files replace PowerPoint and Google Slides for customer presentations. Each file is a branded experience for a specific company or pitch. Describe what you need and Claude picks components that match whether it's more slide-like (16:9 deck) or content-heavy (scrolling page).
+
+A brand generates three files for review: a light scrolling site (`brand-demo.html`), a bold scrolling site (`brand-demo-bold.html`), and a 16:9 slide deck (`brand-slides.html`). The brand file decides which surface is the default and which is the punctuation.
+
+## Motion is part of the brand
+Every brand should be animated. The encouraged baseline: a hero with floating blurred color orbs and a headline that rises in line-by-line, count-up numerals on stats, ring-draw animations on radial charts, and staggered section entrances. The brand file documents which animations are on by default and any brand-specific tweaks.
 
 ## Setting up a brand
 Before building any presentation, a brand file must exist for the target company.

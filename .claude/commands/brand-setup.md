@@ -28,10 +28,10 @@ Lowercase the company name, replace spaces with hyphens, remove special characte
 Create `.claude/commands/[slug]-brand.md` with this structure:
 
 ```
-You are creating an HTML presentation file in [Company]'s brand style. Read CLAUDE.md first for global rules, then apply everything below.
+You are creating HTML presentation files in [Company]'s brand style. Read CLAUDE.md first for global rules, then apply everything below.
 
 ## Brand personality
-[2–3 sentences describing the company's personality, visual tone, and what the presentation should feel like. Derive this from the website content and user-provided vibe if given.]
+[2 to 3 sentences describing the company's personality, visual tone, and what the presentation should feel like. Derive this from the website content and the user-provided vibe if given.]
 
 ## Design tokens
 [CSS :root block with all custom properties, derived from the real brand colors]
@@ -39,42 +39,58 @@ You are creating an HTML presentation file in [Company]'s brand style. Read CLAU
 ## Typography
 [Font choice and weight specification]
 
+## Surface strategy
+[Which of the three deliverables is the default surface and which is the punctuation. For example: "Light scrolling site is default. Bold scrolling site uses the deep brand color as the dominant canvas. The slide deck mixes both, with deep slides reserved for title, segue, and CTA moments."]
+
+## Animations
+[Which motion patterns are on by default for this brand. For example: floating orb hero, line-by-line headline rise on load, count-up numerals on stats, ring-draw on radial charts, staggered section entrances. Include any brand-specific tweaks like the orb colors, the gradient used for animated text, or the easing curve.]
+
 ## Key visual motifs
-[Bullet list of 4–6 brand-specific design patterns]
+[Bullet list of 4 to 6 brand-specific design patterns]
 
 ## Logo
 [HTML snippet using the logo path if provided, or a CSS text placeholder if not]
 
 ## Buttons
-[Primary and ghost button CSS]
+[Primary and ghost button CSS. Default to pill-shaped (border-radius: 999px) unless the brand is known for square buttons.]
 
 ## Common mistakes to avoid
-[3–4 brand-specific pitfalls]
+[3 to 4 brand-specific pitfalls]
 ```
 
-## Step 5 — Generate demo HTML
-Create `projects/[slug]/brand-demo.html` — a single self-contained HTML file that:
-- Uses all 12 components from the component library (ValueAccordion, FeatureRevealCard, StepTimeline, ScrollCardRow, TabbedContent, StatTicker, SplitValuePanel, ComparisonTable, IconFeatureGrid, HeroSlide, PullQuote, CTABand)
-- Applies the new brand tokens throughout
-- Uses real content derived from the company's website — actual product names, real value propositions, real market positioning. No Lorem Ipsum, no generic filler.
-- Uses this layout structure: sticky nav at top → full-width hero section → StatTicker bar → SplitValuePanel → FeatureRevealCard grid → TabbedContent → StepTimeline → ComparisonTable → IconFeatureGrid → ScrollCardRow → ValueAccordion → PullQuote → CTABand at bottom. Each section has a generous heading, eyebrow label, and real copy before the component.
-- Is fully self-contained: no external CSS/JS imports except Google Fonts
+## Step 5 — Generate three demo files
+Build the brand across all three deliverable formats so it's exercised on every surface. Each file is self-contained, uses real content from the company's website (no Lorem Ipsum, no generic filler), and applies the new brand tokens throughout.
+
+**`projects/[slug]/brand-demo.html`** (light scrolling site):
+Sticky nav at top, full-width hero, then StatTicker bar, SplitValuePanel, FeatureRevealCard grid, TabbedContent, StepTimeline, ComparisonTable, IconFeatureGrid, ScrollCardRow, ValueAccordion, PullQuote, and CTABand at the bottom. Each section gets a generous heading and real copy before the component. No eyebrow labels.
+
+**`projects/[slug]/brand-demo-bold.html`** (bold scrolling site):
+Same structure as the light version but the dominant canvas is the brand's deep color. Light interrupt sections (white or near-white backgrounds) for the comparison table and one or two stat moments to give the eye a rest.
+
+**`projects/[slug]/brand-slides.html`** (16:9 slide deck):
+Centered 16:9 stage with arrow-key navigation (left, right, space, Home, End). Salesforce-style chrome: brand logo top-right of every slide, slide counter bottom-right, prev/next buttons bottom-left, a thin progress bar on the very bottom edge. Mix surfaces deliberately: alternate light and deep slides. Roughly 10 to 12 slides covering the same story arc as the scrolling sites.
+
+All three include the brand's animation system. No external CSS or JS imports beyond Google Fonts (or local `@font-face` from `assets/fonts/` if the brand requires it).
 
 ## Step 6 — Output summary
 Print:
 ```
 Brand setup complete.
 
-Brand file:  .claude/commands/[slug]-brand.md
-Demo file:   projects/[slug]/brand-demo.html
+Brand file:    .claude/commands/[slug]-brand.md
+Light site:    projects/[slug]/brand-demo.html
+Bold site:     projects/[slug]/brand-demo-bold.html
+Slide deck:    projects/[slug]/brand-slides.html
 
-Open the demo in your browser to review the brand.
-To refine it, stay in Claude Code and describe what to change — or run /brand-refine.
-To build a real presentation: tell Claude what you need, mentioning the [slug]-brand style.
+Open each file in your browser to review the brand.
+To refine, stay in Claude Code and describe what to change, or run /brand-refine.
+To build a real presentation, tell Claude what you need and mention the [slug]-brand style.
 Commit [slug]-brand.md to share the brand with your team.
 ```
 
 ## Rules
-- All colors, fonts, and motifs must come from the fetched URL and user inputs — never from the reference examples
-- No emojis, no CSS frameworks, no external JS libraries, no Lorem Ipsum
-- The demo HTML must be a single self-contained file that opens directly in a browser
+- All colors, fonts, and motifs must come from the fetched URL and user inputs. Never copy from the reference examples.
+- No emojis, no CSS frameworks, no external JS libraries, no Lorem Ipsum.
+- No em-dashes or en-dashes in copy. Use a period, comma, colon, or rephrase.
+- No eyebrow labels by default. Lead with the headline.
+- Every demo file must be self-contained and open directly in a browser.
