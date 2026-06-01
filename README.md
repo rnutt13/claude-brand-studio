@@ -12,17 +12,17 @@ Output: self-contained single-file HTML decks that open directly in a browser. N
 
 Click the green **Use this template** button on GitHub, name it anything you want (e.g. `stripe-brand-studio`), and create it under your account.
 
-**2. Clone it and make the script executable**
+**2. Clone it**
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME
 cd YOUR_REPO_NAME
-chmod +x brand-setup.sh
 ```
 
-**3. Set up your brand**
+**3. Run the setup script**
 
 ```bash
+chmod +x brand-setup.sh
 ./brand-setup.sh
 ```
 
@@ -57,33 +57,30 @@ Every file is self-contained HTML — open it directly in a browser, share it as
 
 ---
 
-## Advanced: multiple brands in one repo
+## CLI reference
 
-> This is optional. The default workflow is one repo per brand.
+The setup script handles everything — creating brands, sharing them, and keeping the tool current. The default workflow is one repo per brand, but you can run `./brand-setup.sh` multiple times in the same repo to manage several brands in one place.
 
-If you want to manage multiple brands in a single repo, run `./brand-setup.sh` as many times as you need. Each brand gets its own directory under `brands/`.
+```
+./brand-setup.sh                          Set up a new brand (interactive)
+./brand-setup.sh --publish <slug>         Export a brand to its own GitHub repo
+./brand-setup.sh --install <github-url>   Install a brand from a GitHub repo
+./brand-setup.sh --update                 Update tool files (leaves your brands untouched)
+./brand-setup.sh --version                Print version
+```
 
-### Share a brand
-
-Export any brand to its own GitHub repo so teammates can install it:
+**Publishing a brand** creates a standalone repo teammates can install with one command:
 
 ```bash
 ./brand-setup.sh --publish stripe
 # → creates github.com/YOU/claude-wd-stripe
-```
 
-### Install a brand
-
-Pull a brand from a GitHub repo into your local `brands/` directory:
-
-```bash
-./brand-setup.sh --install https://github.com/someone/claude-wd-stripe
+# Teammates install it with:
+./brand-setup.sh --install https://github.com/you/claude-wd-stripe
 # → creates brands/stripe/ and merges any brand-specific assets
 ```
 
-### Keep the tool up to date
-
-Sync the latest tool files without touching your brands or presentations:
+**Updating** pulls the latest tool files from upstream without touching your brands or presentations:
 
 ```bash
 ./brand-setup.sh --update
