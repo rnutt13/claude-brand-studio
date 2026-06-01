@@ -1,4 +1,4 @@
-# Claude Web Design — Project Rules
+# Claude Brand Studio — Project Rules
 
 These rules apply to every HTML file created in this project.
 
@@ -14,36 +14,44 @@ These rules apply to every HTML file created in this project.
 ## Purpose
 These HTML files replace PowerPoint/slide decks for customer presentations. Each file is a branded experience for a specific company or pitch. Describe what you need; Claude picks components that match whether it's more slide-like (full-viewport sections) or content-heavy (scrolling page).
 
-## Setting up a brand
-Before building any presentation, a brand file must exist for the target company.
+## How brands work
+Each brand lives in its own directory under `brands/`:
+```
+brands/stripe/
+brands/acme/
+```
 
-- **New brand:** Run `./brand-setup.sh` from the repo root, or invoke `/brand-setup url="https://yourcompany.com"` directly in Claude Code. This fetches the company website, derives brand tokens, and generates a demo HTML file to review.
-- **Salesforce internal presentations:** Use `/salesforce-brand` directly — no setup needed.
-- **Refining a brand:** After reviewing the demo, describe changes in Claude Code or invoke `/brand-refine`.
+Each brand directory contains a `CLAUDE.md` with brand tokens, personality description, and design rules. Claude Code automatically loads both this root `CLAUDE.md` (global rules) and the brand `CLAUDE.md` (brand tokens) when you launch from inside a brand directory.
+
+**To work on a brand:**
+```bash
+cd brands/stripe
+claude
+```
 
 ## File naming and location
-Save all presentation files inside `projects/`:
+Save all presentation files inside the brand directory:
 ```
-projects/stripe/q3-roadmap.html
-projects/acme/partnership-pitch.html
-projects/internal/q2-business-review.html
+brands/stripe/q3-roadmap.html
+brands/acme/partnership-pitch.html
+brands/salesforce/q2-business-review.html
 ```
 
 ## Asset locations
-Generic tech logos are in `assets/logos/`:
+All assets are relative to the repo root.
+
+### Logos
 ```
-assets/logos/salesforce/Salesforce.png   — Salesforce cloud wordmark
-assets/logos/aws.png                      — AWS
-assets/logos/Slack.png                    — Slack
-assets/logos/mulesoft.png                 — MuleSoft
-assets/logos/claude.svg                   — Claude / Anthropic
-assets/logos/ChatGPT.png                  — ChatGPT / OpenAI
-assets/logos/GCP small.avif               — Google Cloud
+../../assets/logos/salesforce/Salesforce.png   — Salesforce cloud wordmark (works as-is)
+../../assets/logos/aws.png         — AWS
+../../assets/logos/Slack.png       — Slack
+../../assets/logos/mulesoft.png    — MuleSoft
+../../assets/logos/claude.svg      — Claude / Anthropic
+../../assets/logos/ChatGPT.png     — ChatGPT / OpenAI
+../../assets/logos/GCP small.avif  — Google Cloud
 ```
 
-Your company logo path will be documented in your brand file after running `/brand-setup`.
-
-Asset paths from inside `projects/[company]/` use `../../assets/logos/...` (two levels up).
+(Paths shown are relative from inside a `brands/[company]/` directory.)
 
 ### Logo CSS treatments
 - Black logo on dark background: `filter: brightness(0) invert(1)`
@@ -51,9 +59,9 @@ Asset paths from inside `projects/[company]/` use `../../assets/logos/...` (two 
 - Colored-background logo on dark background: `mix-blend-mode: screen` or `mix-blend-mode: lighten`
 
 ## Component library
-Reference file: `components/library.html` — open in a browser to see all available components.
+Reference file: `../../components/library.html`
 
-Available components (use these as building blocks):
+Available components:
 - **ValueAccordion** — collapsed rows that expand on click to show detail
 - **FeatureRevealCard** — card shows headline; click opens a detail drawer below with stats
 - **StepTimeline** — numbered steps, click to expand each
@@ -67,7 +75,6 @@ Available components (use these as building blocks):
 - **PullQuote** — large blockquote with attribution
 - **CTABand** — full-width call-to-action strip
 
-## Brand commands
-- `/brand-setup` — generate brand tokens + demo from a company URL
-- `/brand-refine` — iterate on an existing brand file and demo
-- `/salesforce-brand` — apply Salesforce's built-in brand for internal presentations
+## Brand commands (run from repo root)
+- `/brand-setup` — generate a new brand directory and demos from a company URL
+- `/brand-refine` — iterate on the current brand (run from inside a brand directory)

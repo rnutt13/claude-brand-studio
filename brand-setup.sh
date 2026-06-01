@@ -39,7 +39,6 @@ cmd_update() {
     "components/library.html"
     ".claude/commands/brand-setup.md"
     ".claude/commands/brand-refine.md"
-    ".claude/commands/salesforce-brand.md"
     "docs/reference/dark-brand-example.md"
   )
 
@@ -65,7 +64,7 @@ cmd_update() {
     echo "  ${updated} file(s) updated."
   fi
   echo ""
-  echo "Your brand files and projects/ were not touched."
+  echo "Your brand directories and presentations were not touched."
 }
 
 cmd_publish() {
@@ -75,8 +74,8 @@ cmd_publish() {
     exit 1
   fi
 
-  local brand_file="${SCRIPT_DIR}/.claude/commands/${slug}-brand.md"
-  local demo_file="${SCRIPT_DIR}/projects/${slug}/brand-demo.html"
+  local brand_file="${SCRIPT_DIR}/brands/${slug}/CLAUDE.md"
+  local demo_file="${SCRIPT_DIR}/brands/${slug}/brand-demo.html"
 
   if [ ! -f "$brand_file" ]; then
     echo "Error: brand file not found at ${brand_file}"
@@ -92,13 +91,12 @@ cmd_publish() {
 
   git -C "$tmp_dir" init -q
   git -C "$tmp_dir" checkout -q -b main
-  mkdir -p "${tmp_dir}/.claude/commands"
 
-  cp "$brand_file" "${tmp_dir}/.claude/commands/"
+  mkdir -p "${tmp_dir}/brands/${slug}"
+  cp "$brand_file" "${tmp_dir}/brands/${slug}/CLAUDE.md"
 
   if [ -f "$demo_file" ]; then
-    mkdir -p "${tmp_dir}/demo"
-    cp "$demo_file" "${tmp_dir}/demo/brand-demo.html"
+    cp "$demo_file" "${tmp_dir}/brands/${slug}/brand-demo.html"
   fi
 
   cat > "${tmp_dir}/README.md" <<INNER
@@ -114,7 +112,7 @@ From inside your Claude Brand Studio directory:
 ./brand-setup.sh --install https://github.com/$(gh api user --jq .login 2>/dev/null || echo "YOUR_USERNAME")/${repo_name}
 \`\`\`
 
-This drops \`${slug}-brand.md\` into \`.claude/commands/\` so you can use \`/${slug}-brand\` in Claude Code.
+This drops the brand directory into \`brands/${slug}/\` so you can use it by running \`cd brands/${slug} && claude\`.
 INNER
 
   git -C "$tmp_dir" add -A
@@ -150,32 +148,36 @@ cmd_install() {
     exit 1
   fi
 
-  builtins=("salesforce-brand.md" "brand-setup.md" "brand-refine.md")
   installed=0
-  while IFS= read -r -d '' f; do
-    fname=$(basename "$f")
-    skip=false
-    for b in "${builtins[@]}"; do
-      [ "$fname" = "$b" ] && skip=true && break
-    done
-    $skip && continue
+  # Find brand directories: subdirectories of brands/ that contain a CLAUDE.md
+  while IFS= read -r -d '' brand_dir; do
+    slug=$(basename "$brand_dir")
+    dest="${SCRIPT_DIR}/brands/${slug}"
 
-    dest="${SCRIPT_DIR}/.claude/commands/${fname}"
-    if [ -f "$dest" ]; then
-      echo "  Skipped: ${fname} (already exists — delete it first to reinstall)"
+    if [ -d "$dest" ]; then
+      echo "  Skipped: brands/${slug} (already exists — delete it first to reinstall)"
     else
-      cp "$f" "$dest"
-      echo "  Installed: ${fname}"
+      mkdir -p "${SCRIPT_DIR}/brands"
+      cp -r "$brand_dir" "$dest"
+      echo "  Installed: brands/${slug}"
       installed=$((installed + 1))
     fi
-  done < <(find "${tmp_dir}/.claude/commands" -name "*-brand.md" -print0 2>/dev/null)
+  done < <(find "${tmp_dir}/brands" -maxdepth 1 -mindepth 1 -type d -print0 2>/dev/null)
+
+  # Merge assets (fonts, brand-specific logos) without overwriting existing files
+  if [ -d "${tmp_dir}/assets" ]; then
+    cp -rn "${tmp_dir}/assets/." "${SCRIPT_DIR}/assets/"
+    echo "  Merged: assets/"
+  fi
 
   if [ "$installed" -eq 0 ]; then
-    echo "  No new brand files found."
+    echo "  No new brand directories found."
   else
     echo ""
-    slug=$(ls "${tmp_dir}/.claude/commands/"*-brand.md 2>/dev/null | head -1 | xargs basename | sed 's/-brand\.md//')
-    echo "Brand ready. Use /${slug}-brand in Claude Code before creating presentations."
+    slug=$(find "${tmp_dir}/brands" -maxdepth 1 -mindepth 1 -type d 2>/dev/null | head -1 | xargs basename)
+    echo "Brand ready. To start building:"
+    echo "  cd brands/${slug}"
+    echo "  claude"
   fi
 }
 
@@ -198,8 +200,8 @@ cmd_setup() {
   [ -n "$LOGO" ] && PROMPT="${PROMPT} logo=\"${LOGO}\""
 
   echo ""
-  echo "Opening Claude Code. Your brand setup command is pre-loaded."
-  echo "After setup completes, stay in Claude Code to review and refine."
+  echo "Opening Claude Code to set up your brand."
+  echo "After setup completes, Claude will tell you which directory to work from."
   echo ""
 
   claude "${PROMPT}"

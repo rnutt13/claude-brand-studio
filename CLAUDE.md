@@ -1,4 +1,4 @@
-# Claude Web Design — Project Rules
+# Claude Brand Studio — Project Rules
 
 These rules apply to every HTML file created in this project.
 
@@ -16,28 +16,38 @@ These rules apply to every HTML file created in this project.
 ## Purpose
 These HTML files replace PowerPoint and Google Slides for customer presentations. Each file is a branded experience for a specific company or pitch. Describe what you need and Claude picks components that match whether it's more slide-like (16:9 deck) or content-heavy (scrolling page).
 
-A brand generates three files for review: a light scrolling site (`brand-demo.html`), a bold scrolling site (`brand-demo-bold.html`), and a 16:9 slide deck (`brand-slides.html`). The brand file decides which surface is the default and which is the punctuation.
+A brand generates three files for review: a light scrolling site (`brand-demo.html`), a bold scrolling site (`brand-demo-bold.html`), and a 16:9 slide deck (`brand-slides.html`).
 
 ## Motion is part of the brand
-Every brand should be animated. The encouraged baseline: a hero with floating blurred color orbs and a headline that rises in line-by-line, count-up numerals on stats, ring-draw animations on radial charts, and staggered section entrances. The brand file documents which animations are on by default and any brand-specific tweaks.
+Every brand should be animated. The encouraged baseline: a hero with floating blurred color orbs and a headline that rises in line-by-line, count-up numerals on stats, ring-draw animations on radial charts, and staggered section entrances. The brand CLAUDE.md documents which animations are on by default and any brand-specific tweaks.
 
-## Setting up a brand
-Before building any presentation, a brand file must exist for the target company.
+## How brands work
+Each brand lives in its own directory under `brands/`:
+```
+brands/stripe/
+brands/acme/
+```
 
-- **New brand:** Run `./brand-setup.sh` from the repo root, or invoke `/brand-setup url="https://yourcompany.com"` directly in Claude Code. This fetches the company website, derives brand tokens, and generates a demo HTML file to review.
-- **Salesforce internal presentations:** Use `/salesforce-brand` directly — no setup needed.
-- **Refining a brand:** After reviewing the demo, describe changes in Claude Code or invoke `/brand-refine`.
+Each brand directory contains a `CLAUDE.md` with brand tokens, personality description, and design rules. Claude Code automatically loads both this root `CLAUDE.md` (global rules) and the brand `CLAUDE.md` (brand tokens) when you launch from inside a brand directory — no skill loading needed.
+
+**To work on a brand:**
+```bash
+cd brands/stripe
+claude
+```
+
+**To create a new brand:** Run `./brand-setup.sh` from the repo root.
 
 ## File naming and location
-Save all presentation files inside `projects/`:
+Save all presentation files inside the brand directory:
 ```
-projects/stripe/q3-roadmap.html
-projects/acme/partnership-pitch.html
-projects/internal/q2-business-review.html
+brands/stripe/q3-roadmap.html
+brands/acme/partnership-pitch.html
+brands/salesforce/q2-business-review.html
 ```
 
 ## Asset locations
-Generic tech logos are in `assets/logos/`:
+Generic tech logos are in `assets/logos/` (relative to repo root):
 ```
 assets/logos/salesforce/Salesforce.png   — Salesforce cloud wordmark
 assets/logos/aws.png                      — AWS
@@ -48,9 +58,9 @@ assets/logos/ChatGPT.png                  — ChatGPT / OpenAI
 assets/logos/GCP small.avif               — Google Cloud
 ```
 
-Your company logo path will be documented in your brand file after running `/brand-setup`.
+Your company logo path will be documented in your brand's `CLAUDE.md` after running `/brand-setup`.
 
-Asset paths from inside `projects/[company]/` use `../../assets/logos/...` (two levels up).
+Asset paths from inside `brands/[company]/` use `../../assets/logos/...` (two levels up to reach repo root).
 
 ### Logo CSS treatments
 - Black logo on dark background: `filter: brightness(0) invert(1)`
@@ -58,7 +68,7 @@ Asset paths from inside `projects/[company]/` use `../../assets/logos/...` (two 
 - Colored-background logo on dark background: `mix-blend-mode: screen` or `mix-blend-mode: lighten`
 
 ## Component library
-Reference file: `components/library.html` — open in a browser to see all available components.
+Reference file: `components/library.html` (repo root) — open in a browser to see all available components.
 
 Available components (use these as building blocks):
 - **ValueAccordion** — collapsed rows that expand on click to show detail
@@ -74,7 +84,6 @@ Available components (use these as building blocks):
 - **PullQuote** — large blockquote with attribution
 - **CTABand** — full-width call-to-action strip
 
-## Brand commands
-- `/brand-setup` — generate brand tokens + demo from a company URL
-- `/brand-refine` — iterate on an existing brand file and demo
-- `/salesforce-brand` — apply Salesforce's built-in brand for internal presentations
+## Brand commands (run from repo root)
+- `/brand-setup` — generate a new brand directory and demos from a company URL
+- `/brand-refine` — iterate on the current brand's CLAUDE.md and demo files (run from inside a brand directory)

@@ -1,120 +1,92 @@
 # Claude Brand Studio
 
-A branded HTML presentation generator for [Claude Code](https://claude.ai/code). Point it at any company website and it derives brand tokens, builds a full component demo, and gives you a design system you can use to create polished customer presentations.
+A branded HTML presentation generator for [Claude Code](https://claude.ai/code). Point it at any company website and it derives brand tokens, builds a full component demo, and gives you a design system for creating polished customer presentations.
 
-Output: self-contained single-file HTML decks that open directly in a browser — no build tools, no frameworks, no server.
-
----
-
-## Requirements
-
-- [Claude Code](https://claude.ai/code) CLI installed and authenticated
-- A web browser
+Output: self-contained single-file HTML decks that open directly in a browser. No build tools, no frameworks, no server.
 
 ---
 
-## Quickstart
+## Get started
 
-**1. Create your own copy from this template**
+**1. Create your repo from this template**
 
-On GitHub, click the green **Use this template** button → **Create a new repository**. Pick any name you want (e.g. `acme-brand-studio`, `my-decks`, etc.) and create it under your own GitHub account.
+Click the green **Use this template** button on GitHub, name it anything you want (e.g. `stripe-brand-studio`), and create it under your account.
 
-**2. Clone the new repo you just created**
-
-Use the URL of *your* new repo, not this one:
+**2. Clone it and make the script executable**
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME
 cd YOUR_REPO_NAME
-```
-
-**3. Make the setup script executable**
-
-Only needed once, right after cloning:
-
-```bash
 chmod +x brand-setup.sh
 ```
 
-**4. Set up your brand**
+**3. Set up your brand**
 
 ```bash
 ./brand-setup.sh
 ```
 
-The script asks for your company URL (and optionally a one-word vibe and logo path), then opens Claude Code with setup pre-loaded.
+Enter your company URL when prompted. Claude Code opens, fetches the site, derives brand colors and fonts, and builds three demo files inside `brands/[company]/`.
 
-Claude will:
-1. Fetch your company's website to extract colors, fonts, and visual style
-2. Generate a brand token file at `.claude/commands/[company]-brand.md`
-3. Build a full demo at `projects/[company]/brand-demo.html` showcasing all 12 components
-
-Open the demo in your browser. If anything looks off, stay in Claude Code and describe the change — Claude uses `/brand-refine` to update the tokens and regenerate the demo.
-
-**5. Build a presentation**
-
-Once your brand is ready, describe what you need in Claude Code:
-
-```
-Create a slide deck for our Q3 roadmap review using the stripe-brand style.
-Include a hero, three feature sections, and a CTA.
-```
-
-Or a scrolling landing page:
-
-```
-Build a partnership pitch for Acme Corp using the acme-brand style.
-Lead with our integration story, then show three customer outcomes with stats.
-```
+Open the demos in your browser to review. Describe any changes in Claude Code and they update instantly.
 
 ---
 
-## CLI reference
+## Building presentations
+
+Go to your brand directory, open Claude Code, and describe what you need.
+
+```bash
+cd brands/stripe
+claude
+```
+
+The brand context loads automatically. Just tell Claude what to build:
 
 ```
-./brand-setup.sh                          Set up a new brand (interactive)
-./brand-setup.sh --publish <slug>         Publish your brand to a new GitHub repo
-./brand-setup.sh --install <github-url>   Install a brand from a GitHub repo
-./brand-setup.sh --update                 Update tool files (leaves your brands untouched)
-./brand-setup.sh --version                Print version
+Create a slide deck for our Q3 roadmap.
+Include a hero, three feature sections, and a CTA.
 ```
 
-### Sharing a brand with your team
+```
+Build a scrolling partnership pitch.
+Lead with our integration story, then show three customer outcomes with stats.
+```
 
-Once your brand looks right, publish it to its own GitHub repo:
+Every file is self-contained HTML — open it directly in a browser, share it as a single file, or push the whole repo and let teammates clone it.
+
+---
+
+## Advanced: multiple brands in one repo
+
+> This is optional. The default workflow is one repo per brand.
+
+If you want to manage multiple brands in a single repo, run `./brand-setup.sh` as many times as you need. Each brand gets its own directory under `brands/`.
+
+### Share a brand
+
+Export any brand to its own GitHub repo so teammates can install it:
 
 ```bash
 ./brand-setup.sh --publish stripe
 # → creates github.com/YOU/claude-wd-stripe
 ```
 
-Teammates install it into their own copy:
+### Install a brand
+
+Pull a brand from a GitHub repo into your local `brands/` directory:
 
 ```bash
-./brand-setup.sh --install https://github.com/you/claude-wd-stripe
-# → drops stripe-brand.md into .claude/commands/
-# → use /stripe-brand in Claude Code
+./brand-setup.sh --install https://github.com/someone/claude-wd-stripe
+# → creates brands/stripe/ and merges any brand-specific assets
 ```
 
-### Updating the tool
+### Keep the tool up to date
 
-Pull the latest tool files without touching your brand files or projects:
+Sync the latest tool files without touching your brands or presentations:
 
 ```bash
 ./brand-setup.sh --update
-```
-
----
-
-## Salesforce internal presentations
-
-For internal decks (QBRs, business reviews, team presentations), skip brand setup and use the built-in Salesforce style:
-
-Open Claude Code in this directory, then:
-
-```
-/salesforce-brand
-Create a Q2 business review deck with a hero, executive summary, pipeline metrics, and next steps.
 ```
 
 ---
@@ -142,14 +114,14 @@ Open `components/library.html` in a browser to see all 12 available components:
 
 ## Design rules
 
-Claude follows these on every file it creates:
-
-- No emojis — real logos or CSS shapes only
-- No CSS frameworks (Bootstrap, Tailwind, etc.) — pure CSS with custom properties
-- No external JS libraries — vanilla JS only
-- No Lorem Ipsum — all copy is real and brand-appropriate
-- Single self-contained files — open directly in a browser, no server needed
-- Google Fonts imports are allowed
+- No emojis. Real logos or CSS shapes only.
+- No em-dashes or en-dashes in copy.
+- No eyebrow labels by default. Lead with the headline.
+- No CSS frameworks. Pure CSS with custom properties.
+- No external JS libraries. Vanilla JS only.
+- No Lorem Ipsum. All copy is real and brand-appropriate.
+- Single self-contained files. Open directly in a browser.
+- Google Fonts imports are allowed.
 
 ---
 
@@ -157,11 +129,11 @@ Claude follows these on every file it creates:
 
 ```
 brand-setup.sh              — CLI for setup, publish, install, update
-CLAUDE.md                   — rules Claude follows (read automatically)
+CLAUDE.md                   — design rules (loaded automatically by Claude Code)
 components/library.html     — interactive component reference
-assets/logos/               — generic tech logos (Salesforce, AWS, Slack, etc.)
+assets/logos/               — generic tech logos
 docs/reference/             — structural templates Claude reads internally
-.claude/commands/           — brand skill files (brand-setup, brand-refine, salesforce, yours)
-projects/                   — your generated HTML presentations go here
+.claude/commands/           — brand-setup and brand-refine slash commands
+brands/                     — one directory per brand (created by brand-setup.sh)
 VERSION                     — current tool version
 ```
