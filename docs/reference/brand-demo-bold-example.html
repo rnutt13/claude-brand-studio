@@ -1,0 +1,1032 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Salesforce — The Agentic Era · Electric</title>
+<style>
+@font-face { font-family: 'Salesforce Sans'; src: url('../../assets/fonts/SalesforceSans-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Salesforce Sans'; src: url('../../assets/fonts/SalesforceSans-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Salesforce Sans'; src: url('../../assets/fonts/SalesforceSans-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Salesforce Sans'; src: url('../../assets/fonts/SalesforceSans-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Salesforce Sans'; src: url('../../assets/fonts/SalesforceSans-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Avant Garde For Salesforce'; src: url('../../assets/fonts/AvantGardeForSalesforce-Demi.otf') format('opentype'); font-weight: 100 900; font-style: normal; font-display: swap; }
+
+:root {
+  --cloud-90:    #cfe9fe;
+  --cloud-70:    #00b3ff;
+  --electric-50: #066afe;
+  --electric-30: #022ac0;
+  --electric-20: #002775;
+  --electric-15: #001a52;
+
+  --aurora: linear-gradient(110deg, #00b3ff 0%, #066afe 35%, #7c3aed 70%, #00b5cc 100%);
+
+  --bg:        var(--electric-30);  /* Electric Blue 30 — dominant */
+  --bg-deeper: var(--electric-20);
+  --bg-deepest:var(--electric-15);
+  --bg-card:   rgba(255,255,255,0.06);
+  --bg-card-strong: rgba(255,255,255,0.09);
+  --bg-light:  var(--cloud-90);
+
+  --text:           #ffffff;
+  --text-dim:       rgba(255,255,255,0.78);
+  --text-muted:     rgba(255,255,255,0.55);
+  --text-on-light:  var(--electric-20);
+  --text-on-light-dim: #1a3370;
+
+  --border:        rgba(255,255,255,0.14);
+  --border-strong: rgba(255,255,255,0.22);
+  --border-light:  #d6e6fa;
+
+  --font:         'Salesforce Sans', -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Avant Garde For Salesforce', 'Salesforce Sans', -apple-system, sans-serif;
+
+  --radius:    8px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+img { max-width: 100%; display:block; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+
+/* =============== HEADLINES =============== */
+h1, h2, h3, h4 { margin: 0; }
+.h-display {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 7vw, 112px);
+  line-height: 1; letter-spacing: -0.025em;
+}
+.h-section {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 4.6vw, 72px);
+  line-height: 1.04; letter-spacing: -0.022em;
+  max-width: 18ch; color: #fff;
+}
+.h-block {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 2.6vw, 40px);
+  line-height: 1.1; letter-spacing: -0.018em;
+}
+.section-lede {
+  font-size: clamp(18px, 1.4vw, 22px);
+  line-height: 1.6; color: var(--text-dim);
+  max-width: 64ch; margin-top: 22px;
+}
+.grad {
+  background: var(--aurora);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* =============== BUTTONS =============== */
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--cloud-70); color: #fff;
+  font: 700 15px/1 var(--font); letter-spacing: 0.02em;
+  padding: 16px 32px; border: none; border-radius: 999px;
+  cursor: pointer; transition: background .2s, transform .2s, box-shadow .2s;
+  box-shadow: 0 12px 30px -10px rgba(0,179,255,0.6);
+}
+.btn-primary:hover { background: #fff; color: var(--electric-20); transform: translateY(-1px); box-shadow: 0 14px 32px -10px rgba(255,255,255,0.45); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: #fff;
+  font: 700 15px/1 var(--font); padding: 16px 28px;
+  border: 1.5px solid rgba(255,255,255,0.45); border-radius: 999px; cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.btn-ghost:hover { background: #fff; color: var(--electric-20); border-color: #fff; }
+
+/* =============== NAV =============== */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(2,42,192,0.72);
+  backdrop-filter: saturate(140%) blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; gap: 40px; padding: 18px 48px;
+}
+.nav-logo img { height: 28px; filter: brightness(0) invert(1); }
+.nav-links { display: flex; gap: 32px; flex: 1; }
+.nav-link {
+  font: 600 14px/1 var(--font); color: rgba(255,255,255,0.78);
+  position: relative; padding: 6px 0; cursor: pointer;
+  transition: color .2s;
+}
+.nav-link:hover, .nav-link.active { color: #fff; }
+.nav-link::after {
+  content: ''; position: absolute; left:0; bottom:0; height:2px; width:0;
+  background: var(--cloud-70); transition: width .25s ease;
+}
+.nav-link:hover::after, .nav-link.active::after { width: 100%; }
+.nav-cta { display: flex; gap: 12px; align-items: center; }
+.nav-cta .btn-text { font: 600 14px/1 var(--font); color: #fff; background: transparent; border: none; cursor: pointer; padding: 8px 4px; }
+
+/* =============== HERO =============== */
+.hero {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 18% 10%, rgba(0,179,255,0.36) 0%, transparent 55%),
+    radial-gradient(ellipse at 95% 90%, rgba(6,106,254,0.5) 0%, transparent 55%),
+    linear-gradient(160deg, var(--electric-20) 0%, var(--electric-30) 70%, var(--electric-50) 110%);
+  overflow: hidden; isolation: isolate;
+  min-height: 92vh;
+  display: flex; align-items: center;
+}
+.hero::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1.2px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.15) 60%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.15) 60%, transparent);
+  pointer-events: none;
+}
+.hero-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.55; pointer-events: none; z-index: 0; animation: float 18s ease-in-out infinite; }
+.hero-orb.a { width: 460px; height: 460px; top: -120px; left: -100px; background: #00b3ff; }
+.hero-orb.b { width: 360px; height: 360px; bottom: -120px; right: 8%; background: #066afe; animation-delay: -6s; }
+.hero-orb.c { width: 220px; height: 220px; top: 30%; right: 28%; background: #00b5cc; opacity: 0.35; animation-delay: -12s; }
+@keyframes float {
+  0%, 100% { transform: translate3d(0,0,0); }
+  33%      { transform: translate3d(40px, -30px, 0); }
+  66%      { transform: translate3d(-30px, 25px, 0); }
+}
+.hero-inner { position: relative; z-index: 2; max-width: 1280px; margin: 0 auto; padding: 130px 48px 110px; width: 100%; }
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(60px, 8vw, 132px);
+  line-height: 1; letter-spacing: -0.03em;
+  margin: 0 0 28px; max-width: 16ch; color: #fff;
+  opacity: 0; transform: translateY(24px); animation: rise 0.9s 0.05s ease forwards;
+}
+.hero h1 .line2 { display: block; opacity: 0; transform: translateY(24px); animation: rise 0.9s 0.25s ease forwards; }
+.hero h1 .line3 { display: block; opacity: 0; transform: translateY(24px); animation: rise 0.9s 0.45s ease forwards; }
+@keyframes rise { to { opacity: 1; transform: none; } }
+.hero p.lede {
+  max-width: 60ch; font-size: clamp(18px, 1.55vw, 24px); line-height: 1.55;
+  color: rgba(255,255,255,0.85); margin: 0 0 38px;
+  opacity: 0; transform: translateY(20px); animation: rise 0.9s 0.6s ease forwards;
+}
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; opacity: 0; transform: translateY(20px); animation: rise 0.9s 0.75s ease forwards; }
+.hero-meta {
+  margin-top: 90px; display: grid; grid-template-columns: repeat(3, max-content); gap: 60px;
+  border-top: 1px solid var(--border-strong); padding-top: 30px;
+  opacity: 0; transform: translateY(20px); animation: rise 0.9s 0.95s ease forwards;
+}
+.hero-meta .v { font-family: var(--font-display); font-size: 32px; line-height: 1; color: #fff; letter-spacing: -0.01em; }
+.hero-meta .l { margin-top: 8px; font-size: 14px; color: rgba(255,255,255,0.7); }
+
+/* =============== SECTIONS (deep blue body) =============== */
+.section { padding: 120px 0; position: relative; }
+.section.deeper { background: var(--bg-deeper); }
+.section.light  { background: var(--cloud-90); color: var(--text-on-light); }
+.section.light .h-section { color: var(--text-on-light); }
+.section.light .section-lede { color: var(--text-on-light-dim); }
+.section-head { margin-bottom: 64px; max-width: 880px; }
+
+/* =============== STAT BAND (light interrupt) =============== */
+.stat-band {
+  background: #fff; color: var(--text-on-light);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 90px 0;
+}
+.stat-band .h-section { color: var(--text-on-light); }
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+.stat .num {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 7vw, 104px); line-height: 1; letter-spacing: -0.025em;
+  background: var(--aurora);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.stat .label { margin-top: 18px; font-weight: 700; font-size: 16px; color: var(--electric-20); }
+.stat .desc  { margin-top: 8px; font-size: 14px; color: #5b6b9a; line-height: 1.6; max-width: 32ch; }
+
+/* =============== SPLIT VALUE =============== */
+.split { display: grid; grid-template-columns: 1.1fr 1fr; gap: 80px; align-items: center; }
+.split .visual {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 40px; min-height: 440px; overflow: hidden;
+  backdrop-filter: blur(2px);
+}
+.orbit-card {
+  position: relative; z-index: 2;
+  background: rgba(255,255,255,0.08); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 22px;
+  display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+  color: #fff;
+}
+.orbit-card .badge {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--cloud-70); color: #fff;
+  display: flex; align-items: center; justify-content: center; font: 700 13px/1 var(--font);
+}
+.orbit-card .badge.b1 { background: var(--electric-50); }
+.orbit-card .badge.b2 { background: #ffffff; color: var(--electric-30); }
+.orbit-card .badge.b3 { background: var(--electric-20); border: 1px solid var(--border-strong); }
+.orbit-card .meta { flex: 1; }
+.orbit-card .t { font-weight: 700; font-size: 15px; color: #fff; }
+.orbit-card .s { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+.orbit-card .stat-mini { font-family: var(--font-display); font-size: 20px; color: var(--cloud-70); }
+.orbit-card.featured { border-color: var(--cloud-70); box-shadow: 0 0 0 1px var(--cloud-70); }
+
+/* =============== FEATURE REVEAL =============== */
+.reveal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.reveal-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-xl); padding: 32px;
+  cursor: pointer; transition: transform .2s, border-color .2s, background .2s;
+  position: relative;
+}
+.reveal-card:hover { transform: translateY(-3px); border-color: var(--cloud-70); background: var(--bg-card-strong); }
+.reveal-card.open { border-color: var(--cloud-70); background: var(--bg-card-strong); box-shadow: 0 0 0 1px var(--cloud-70); }
+.reveal-card .head { display: flex; align-items: center; justify-content: space-between; }
+.reveal-card .product { font-family: var(--font-display); font-size: 26px; letter-spacing: -0.015em; color: #fff; }
+.reveal-card .toggle {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,0.1); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font: 700 18px/1 var(--font); transition: transform .25s, background .2s;
+}
+.reveal-card.open .toggle { transform: rotate(45deg); background: var(--cloud-70); color: #fff; }
+.reveal-card .summary { margin-top: 12px; color: var(--text-dim); font-size: 16px; line-height: 1.6; }
+.reveal-card .drawer { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+.reveal-card.open .drawer { max-height: 320px; }
+.reveal-card .drawer-inner { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.reveal-card .stat-mini .n { font-family: var(--font-display); font-size: 32px; line-height: 1; background: var(--aurora); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.reveal-card .stat-mini .l { margin-top: 8px; font-size: 13px; color: var(--text-muted); }
+
+/* =============== TABS =============== */
+.tabs-bar { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 48px; flex-wrap: wrap; }
+.tab-btn {
+  background: none; border: none; cursor: pointer;
+  padding: 18px 26px; font: 700 16px/1 var(--font); color: var(--text-muted);
+  position: relative; transition: color .2s;
+}
+.tab-btn:hover { color: var(--text-dim); }
+.tab-btn.active { color: #fff; }
+.tab-btn::after {
+  content: ''; position: absolute; left: 22px; right: 22px; bottom: -1px; height: 3px;
+  background: var(--cloud-70); border-radius: 3px; transform: scaleX(0); transform-origin: left;
+  transition: transform .25s ease;
+}
+.tab-btn.active::after { transform: scaleX(1); }
+.tab-panel { display: none; }
+.tab-panel.active { display: grid; grid-template-columns: 1.15fr 1fr; gap: 64px; align-items: center; }
+.tab-panel h3 { font-family: var(--font-display); font-size: clamp(26px, 2.4vw, 38px); letter-spacing: -0.02em; color: #fff; margin: 0 0 14px; }
+.tab-panel p  { color: var(--text-dim); font-size: 17px; line-height: 1.7; margin: 0 0 12px; max-width: 56ch; }
+.tab-panel .bullets { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 14px; }
+.tab-panel .bullets li { display: flex; gap: 14px; align-items: flex-start; font-size: 16px; color: var(--text-dim); }
+.check { width:20px; height:20px; border-radius:50%; background:rgba(255,255,255,0.1); border:1.5px solid var(--cloud-70); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:3px; }
+.check::after { content:''; width:7px; height:4px; border-left:1.5px solid var(--cloud-70); border-bottom:1.5px solid var(--cloud-70); transform:rotate(-45deg) translateY(-1px); }
+
+.tab-illus {
+  border-radius: var(--radius-xl);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 32px; min-height: 360px; position: relative; overflow: hidden;
+}
+.tab-illus .row {
+  background: rgba(255,255,255,0.07); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px;
+  display: flex; align-items: center; gap: 14px; margin-bottom: 12px;
+  color: #fff;
+}
+.tab-illus .row .av { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.12); color: #fff; display: flex; align-items: center; justify-content: center; font: 700 12px/1 var(--font); }
+.tab-illus .row .l { flex: 1; font: 700 14px/1.2 var(--font); color: #fff; }
+.tab-illus .row .v { font: 600 13px/1 var(--font); color: var(--text-dim); }
+.tab-illus .row.active { border-color: var(--cloud-70); box-shadow: 0 0 0 1.5px var(--cloud-70); }
+.tab-illus .row.active .av { background: var(--cloud-70); }
+
+/* =============== STEPS =============== */
+.steps { display: grid; gap: 14px; }
+.step {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl);
+  padding: 24px 30px; cursor: pointer;
+  transition: border-color .2s, background .2s, transform .2s;
+}
+.step:hover { border-color: var(--cloud-70); background: var(--bg-card-strong); }
+.step.open { border-color: var(--cloud-70); background: var(--bg-card-strong); box-shadow: 0 0 0 1px var(--cloud-70); }
+.step-head { display: flex; align-items: center; gap: 24px; }
+.step-num {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: rgba(255,255,255,0.08); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 22px;
+  flex-shrink: 0; transition: background .2s, color .2s;
+}
+.step.open .step-num { background: var(--cloud-70); color: #fff; }
+.step-title { flex: 1; font-family: var(--font-display); font-size: clamp(20px, 1.8vw, 26px); letter-spacing: -0.01em; color: #fff; }
+.step-tag { font: 700 11px/1 var(--font); letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); }
+.step-body { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+.step.open .step-body { max-height: 240px; }
+.step-body-inner { padding: 18px 0 4px 80px; color: var(--text-dim); font-size: 16px; line-height: 1.7; max-width: 70ch; }
+
+/* =============== COMPARISON (light interrupt) =============== */
+.compare {
+  border: 1px solid var(--border-light); border-radius: var(--radius-xl);
+  overflow: hidden; background: #fff; color: var(--text-on-light);
+  box-shadow: 0 24px 60px -40px rgba(0,0,0,0.4);
+}
+.compare-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr; border-bottom: 1px solid var(--border-light); }
+.compare-row:last-child { border-bottom: 0; }
+.compare-row > div { padding: 22px 28px; font-size: 16px; color: var(--text-on-light-dim); }
+.compare-row.head > div { font: 700 14px/1 var(--font); letter-spacing: 0.04em; color: var(--electric-20); background: var(--cloud-90); }
+.compare-row.head .winner { background: var(--cloud-70); color: #fff; }
+.compare-row .winner { background: rgba(0,179,255,0.07); color: var(--electric-20); font-weight: 600; }
+.compare-row .label { color: var(--electric-20); font-weight: 600; }
+.dotmark { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--cloud-70); margin-right: 10px; vertical-align: middle; }
+.dotmark.muted { background: #5b6b9a; opacity: 0.55; }
+
+/* =============== ICON GRID =============== */
+.icon-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.icon-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl);
+  padding: 32px; display: flex; flex-direction: column; gap: 16px;
+  transition: transform .2s, border-color .2s, background .2s;
+}
+.icon-card:hover { transform: translateY(-3px); border-color: var(--cloud-70); background: var(--bg-card-strong); }
+.icon-card .ico {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,179,255,0.18); color: var(--cloud-70);
+}
+.icon-card .ico svg { width: 26px; height: 26px; }
+.icon-card h4 { font-family: var(--font-display); font-size: 22px; letter-spacing: -0.01em; color: #fff; }
+.icon-card p { color: var(--text-dim); font-size: 15px; line-height: 1.65; margin: 0; }
+
+/* =============== RADIALS (light interrupt) =============== */
+.radials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.radial-card {
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  border-radius: var(--radius-xl); padding: 36px;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  color: #fff;
+}
+.radial { position: relative; width: 220px; height: 220px; }
+.radial svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.radial .track { fill: none; stroke: rgba(255,255,255,0.12); stroke-width: 16; }
+.radial .bar   { fill: none; stroke: var(--cloud-70); stroke-width: 16; stroke-linecap: round; transition: stroke-dashoffset 1.2s ease; }
+.radial .bar.deep { stroke: #fff; }
+.radial .v {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 52px; color: #fff;
+}
+.radial-card .desc { margin-top: 22px; font-size: 16px; color: var(--text-dim); max-width: 28ch; }
+
+/* =============== INDUSTRY CARDS (purple gradient) =============== */
+.industry-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+.industry-card {
+  position: relative; overflow: hidden;
+  background: linear-gradient(165deg, #6c2bd9 0%, #8a3fed 50%, #a16cf5 100%);
+  border-radius: var(--radius-xl);
+  padding: 32px 28px 28px;
+  color: #fff; min-height: 320px;
+  display: flex; flex-direction: column;
+  box-shadow: 0 24px 48px -28px rgba(124,58,237,0.6);
+  transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease;
+  cursor: pointer;
+}
+.industry-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 0%, rgba(255,255,255,0.18) 0%, transparent 55%);
+  pointer-events: none;
+}
+.industry-card:hover { transform: translateY(-6px); box-shadow: 0 32px 60px -28px rgba(124,58,237,0.8); }
+.industry-card h3 {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.2vw, 32px);
+  line-height: 1.05; letter-spacing: -0.02em;
+  margin: 0 0 18px; color: #fff; position: relative;
+}
+.industry-card p { font-size: 15px; line-height: 1.5; color: rgba(255,255,255,0.88); margin: 0; position: relative; }
+.industry-card .ic-foot {
+  margin-top: auto; padding-top: 24px;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+  position: relative;
+}
+.industry-card .learn {
+  font: 700 14px/1 var(--font); color: #fff;
+  text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1.5px;
+  cursor: pointer; transition: color .2s;
+}
+.industry-card .learn:hover { color: #f0e6ff; }
+.industry-card .ic-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #fff; color: #6c2bd9;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; box-shadow: 0 8px 24px -10px rgba(0,0,0,0.3);
+  transition: transform .3s cubic-bezier(.2,.7,.2,1);
+}
+.industry-card:hover .ic-icon { transform: rotate(-8deg) scale(1.06); }
+.industry-card .ic-icon svg { width: 26px; height: 26px; }
+
+/* =============== SCROLL CARDS =============== */
+.scroll-wrap { position: relative; }
+.scroll-rail { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 4px 22px 4px; }
+.scroll-rail::-webkit-scrollbar { height: 6px; }
+.scroll-rail::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+.scroll-card {
+  flex: 0 0 360px; scroll-snap-align: start;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl);
+  padding: 28px; display: flex; flex-direction: column; gap: 14px;
+  color: #fff;
+}
+.scroll-card .industry { font: 700 13px/1 var(--font); color: var(--cloud-70); letter-spacing: 0.06em; text-transform: uppercase; }
+.scroll-card .quote { font-family: var(--font-display); font-size: 22px; line-height: 1.35; letter-spacing: -0.01em; color: #fff; margin: 0; }
+.scroll-card .who { display: flex; gap: 14px; align-items: center; margin-top: auto; }
+.scroll-card .who .av { width: 40px; height: 40px; border-radius: 10px; background: var(--cloud-70); color: #fff; display: flex; align-items: center; justify-content: center; font: 700 14px/1 var(--font); }
+.scroll-card .who .name { font-weight: 700; font-size: 15px; color: #fff; }
+.scroll-card .who .role { font-size: 13px; color: var(--text-muted); }
+.scroll-arrows { position: absolute; right: 4px; top: -56px; display: flex; gap: 8px; }
+.scroll-arrows button {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--bg-card); border: 1px solid var(--border); cursor: pointer;
+  font-size: 18px; color: #fff; transition: all .2s;
+}
+.scroll-arrows button:hover { border-color: var(--cloud-70); color: var(--cloud-70); }
+
+/* =============== ACCORDION =============== */
+.accordion { border-top: 1px solid var(--border); }
+.acc-row { border-bottom: 1px solid var(--border); cursor: pointer; transition: background .2s; }
+.acc-row:hover { background: rgba(255,255,255,0.04); }
+.acc-head { display: grid; grid-template-columns: 80px 1fr auto; gap: 28px; padding: 32px 8px; align-items: center; }
+.acc-num { font-family: var(--font-display); font-size: 22px; color: var(--cloud-70); }
+.acc-title { font-family: var(--font-display); font-size: clamp(22px, 2vw, 30px); letter-spacing: -0.015em; color: #fff; }
+.acc-toggle {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.5); color: #fff;
+  display: flex; align-items: center; justify-content: center; font-weight: 700;
+  transition: transform .25s, background .2s, border-color .2s;
+}
+.acc-row.open .acc-toggle { transform: rotate(45deg); background: var(--cloud-70); border-color: var(--cloud-70); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+.acc-row.open .acc-body { max-height: 360px; }
+.acc-body-inner {
+  padding: 0 8px 32px 108px;
+  display: grid; grid-template-columns: 2fr 1fr; gap: 40px;
+  color: var(--text-dim); font-size: 16px; line-height: 1.7;
+}
+.acc-body-inner .mini-stat { font-family: var(--font-display); font-size: 48px; line-height: 1; background: var(--aurora); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.acc-body-inner .mini-stat-label { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+
+/* =============== PULL QUOTE =============== */
+.pull { text-align: center; max-width: 1040px; margin: 0 auto; padding: 40px 20px; }
+.pull blockquote {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 56px); letter-spacing: -0.022em; line-height: 1.18;
+  color: #fff; margin: 0;
+}
+.pull cite { display: block; margin-top: 32px; font-style: normal; font-size: 15px; color: var(--text-muted); }
+.pull cite b { color: #fff; font-weight: 700; }
+
+/* =============== CTA =============== */
+.cta {
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0,179,255,0.4) 0%, transparent 55%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 55%),
+    linear-gradient(160deg, var(--electric-20) 0%, var(--electric-15) 100%);
+  color: #fff; padding: 130px 0; isolation: isolate;
+}
+.cta-inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1.4fr 1fr; gap: 64px; align-items: center; }
+.cta h2 {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 5vw, 80px); letter-spacing: -0.025em; line-height: 1.05;
+  margin: 0 0 24px; max-width: 18ch;
+}
+.cta p { color: rgba(255,255,255,0.78); font-size: 19px; line-height: 1.65; max-width: 56ch; margin: 0 0 36px; }
+.cta-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.cta-side {
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl); padding: 32px;
+}
+.cta-side h4 { font-family: var(--font-display); font-size: 22px; margin: 0 0 18px; color: #fff; }
+.cta-side ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.cta-side li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; color: rgba(255,255,255,0.78); }
+.cta-side li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--cloud-70); margin-top: 9px; flex-shrink: 0; box-shadow: 0 0 12px rgba(0,179,255,0.7); }
+
+/* =============== FOOTER =============== */
+.foot { padding: 44px 0; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+.foot-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; color: rgba(255,255,255,0.6); }
+
+/* =============== RESPONSIVE =============== */
+@media (max-width: 980px) {
+  .stat-grid, .reveal-grid, .icon-grid, .radials, .industry-grid { grid-template-columns: repeat(2, 1fr); }
+  .split, .tab-panel.active, .cta-inner { grid-template-columns: 1fr; gap: 48px; }
+  .nav-links { display: none; }
+  .acc-body-inner { grid-template-columns: 1fr; padding-left: 8px; }
+}
+@media (max-width: 640px) {
+  .stat-grid, .reveal-grid, .icon-grid, .radials, .industry-grid { grid-template-columns: 1fr; }
+  .compare-row { grid-template-columns: 1fr; }
+  .compare-row > div { padding: 14px 18px; }
+  .section { padding: 80px 0; }
+  .hero-inner { padding: 90px 24px 90px; }
+  .wrap, .nav-inner { padding-left: 24px; padding-right: 24px; }
+  .hero-meta { grid-template-columns: 1fr 1fr; gap: 30px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#top" aria-label="Salesforce home">
+      <img src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce" />
+    </a>
+    <div class="nav-links">
+      <span class="nav-link active">Agentforce</span>
+      <span class="nav-link">Customer 360</span>
+      <span class="nav-link">Data 360</span>
+      <span class="nav-link">Slack</span>
+      <span class="nav-link">Industries</span>
+      <span class="nav-link">Pricing</span>
+    </div>
+    <div class="nav-cta">
+      <button class="btn-text">Sign in</button>
+      <button class="btn-primary">Try for free</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <span class="hero-orb a"></span>
+  <span class="hero-orb b"></span>
+  <span class="hero-orb c"></span>
+  <div class="hero-inner">
+    <h1>
+      The <span class="grad">#1 Agentic CRM</span>
+      <span class="line2">for the next</span>
+      <span class="line3">decade of work.</span>
+    </h1>
+    <p class="lede">Sales, service, marketing and commerce — unified on one trusted platform where humans and AI agents work as one team. Powered by Customer 360, Data 360, and Slack.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Start with Agentforce</button>
+      <button class="btn-ghost">Watch the keynote</button>
+    </div>
+    <div class="hero-meta">
+      <div><div class="v">150,000+</div><div class="l">companies on Customer 360</div></div>
+      <div><div class="v">1B+</div><div class="l">agent interactions per quarter</div></div>
+      <div><div class="v">#1</div><div class="l">CRM for 11 consecutive years</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="stat-band">
+  <div class="wrap">
+    <h2 class="h-section" style="margin-bottom: 56px; max-width: 24ch;">Outcomes our customers are already shipping with Agentforce.</h2>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">233%</div><div class="label">Average ROI</div><div class="desc">Validated by IDC across Customer 360 deployments over a three-year window.</div></div>
+      <div class="stat"><div class="num">42%</div><div class="label">Faster case resolution</div><div class="desc">Service Cloud teams using Agentforce for triage and reply drafting.</div></div>
+      <div class="stat"><div class="num">31%</div><div class="label">More pipeline</div><div class="desc">Sales reps with Sales Cloud + Agentforce SDR running on their book.</div></div>
+      <div class="stat"><div class="num">9.4&times;</div><div class="label">Faster builds</div><div class="desc">Time from idea to deployed agent vs. building point AI tools in-house.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <h2 class="h-section">Customer 360, finally with a brain.</h2>
+        <p class="section-lede">Sales, Service, Marketing, Commerce, Data Cloud and Slack all sit on the same metadata, the same trust layer, and now the same agent runtime. Agentforce sees every record, every workflow, and every conversation — and acts on them.</p>
+        <p class="section-lede" style="margin-top: 14px;">That's the unlock. Not another copilot bolted onto a vendor stack — a deeply-integrated agent layer that's been earning your customers' trust since 1999.</p>
+        <div style="display:flex; gap:14px; margin-top: 36px;">
+          <button class="btn-primary">See the platform</button>
+          <button class="btn-ghost">Read the architecture</button>
+        </div>
+      </div>
+      <div class="visual" aria-hidden="true">
+        <div class="orbit-card featured">
+          <div class="badge">AF</div>
+          <div class="meta"><div class="t">Agentforce — Service Agent</div><div class="s">Resolved 1,284 cases this week</div></div>
+          <div class="stat-mini">94%</div>
+        </div>
+        <div class="orbit-card">
+          <div class="badge b1">SC</div>
+          <div class="meta"><div class="t">Sales Cloud · Pipeline</div><div class="s">12 deals nudged forward by SDR Agent</div></div>
+          <div class="stat-mini">+$2.4M</div>
+        </div>
+        <div class="orbit-card">
+          <div class="badge b2">D360</div>
+          <div class="meta"><div class="t">Data 360 · Real-time profile</div><div class="s">7 sources unified, 0 ETL jobs</div></div>
+          <div class="stat-mini">3.1s</div>
+        </div>
+        <div class="orbit-card">
+          <div class="badge b3">SL</div>
+          <div class="meta"><div class="t">Slack · Channel handoff</div><div class="s">Agent escalated to #cust-acme-tier1</div></div>
+          <div class="stat-mini">2m</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section deeper">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section">Four products. One agentic fabric.</h2>
+      <p class="section-lede">Click any card to see what each layer of the stack actually does — and the metric customers measure it on.</p>
+    </div>
+    <div class="reveal-grid">
+      <div class="reveal-card open" data-reveal>
+        <div class="head"><div class="product">Agentforce</div><div class="toggle">+</div></div>
+        <p class="summary">Always-on agents for customers and employees, with grounded reasoning over your Salesforce data.</p>
+        <div class="drawer"><div class="drawer-inner">
+          <div class="stat-mini"><div class="n">120+</div><div class="l">Prebuilt skills</div></div>
+          <div class="stat-mini"><div class="n">42%</div><div class="l">Faster resolution</div></div>
+        </div></div>
+      </div>
+      <div class="reveal-card" data-reveal>
+        <div class="head"><div class="product">Customer 360</div><div class="toggle">+</div></div>
+        <p class="summary">Sales, Service, Marketing, Commerce — one set of records, one trust boundary, one workflow engine.</p>
+        <div class="drawer"><div class="drawer-inner">
+          <div class="stat-mini"><div class="n">150K</div><div class="l">Companies live</div></div>
+          <div class="stat-mini"><div class="n">11 yr</div><div class="l">#1 CRM streak</div></div>
+        </div></div>
+      </div>
+      <div class="reveal-card" data-reveal>
+        <div class="head"><div class="product">Data 360</div><div class="toggle">+</div></div>
+        <p class="summary">Zero-copy access to every system of record, with a live customer profile your agents can reason over.</p>
+        <div class="drawer"><div class="drawer-inner">
+          <div class="stat-mini"><div class="n">200+</div><div class="l">Native connectors</div></div>
+          <div class="stat-mini"><div class="n">3.1s</div><div class="l">Profile refresh</div></div>
+        </div></div>
+      </div>
+      <div class="reveal-card" data-reveal>
+        <div class="head"><div class="product">Slack</div><div class="toggle">+</div></div>
+        <p class="summary">The conversational surface where people, data, apps and agents collaborate in the same thread.</p>
+        <div class="drawer"><div class="drawer-inner">
+          <div class="stat-mini"><div class="n">79M</div><div class="l">Daily users</div></div>
+          <div class="stat-mini"><div class="n">2,600+</div><div class="l">App integrations</div></div>
+        </div></div>
+      </div>
+      <div class="reveal-card" data-reveal>
+        <div class="head"><div class="product">Tableau</div><div class="toggle">+</div></div>
+        <p class="summary">Tableau Pulse and Agentforce Analyst turn every metric into a conversation with your data.</p>
+        <div class="drawer"><div class="drawer-inner">
+          <div class="stat-mini"><div class="n">1M+</div><div class="l">Active analysts</div></div>
+          <div class="stat-mini"><div class="n">5&times;</div><div class="l">Faster insight</div></div>
+        </div></div>
+      </div>
+      <div class="reveal-card" data-reveal>
+        <div class="head"><div class="product">MuleSoft</div><div class="toggle">+</div></div>
+        <p class="summary">The integration backbone — every agent action is a governed, auditable API call.</p>
+        <div class="drawer"><div class="drawer-inner">
+          <div class="stat-mini"><div class="n">800+</div><div class="l">Connectors</div></div>
+          <div class="stat-mini"><div class="n">73%</div><div class="l">IT time saved</div></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section">What changes the day Agentforce goes live.</h2>
+      <p class="section-lede">Choose a role — see the workflow that flips from manual to autonomous.</p>
+    </div>
+    <div class="tabs-bar" role="tablist">
+      <button class="tab-btn active" data-tab="sales">Sales</button>
+      <button class="tab-btn" data-tab="service">Service</button>
+      <button class="tab-btn" data-tab="marketing">Marketing</button>
+      <button class="tab-btn" data-tab="it">IT &amp; Admin</button>
+    </div>
+    <div class="tab-panel active" data-panel="sales">
+      <div>
+        <h3>Reps close. Agents do the rest.</h3>
+        <p>SDR Agent qualifies inbound, books the meeting, and writes the brief. Sales Coach Agent rehearses the call. The rep walks in informed and walks out with a signed deal — not a CRM update task.</p>
+        <ul class="bullets">
+          <li><span class="check"></span>Inbound qualification within 90 seconds, 24/7</li>
+          <li><span class="check"></span>Pre-meeting research stitched from CRM + web + product usage</li>
+          <li><span class="check"></span>Auto-logged calls, contacts, opportunities — verified by the rep</li>
+        </ul>
+      </div>
+      <div class="tab-illus">
+        <div class="row active"><div class="av">SDR</div><div class="l">New lead — Acme Corp</div><div class="v">Qualified · 0:42</div></div>
+        <div class="row"><div class="av">RES</div><div class="l">Pre-meeting brief drafted</div><div class="v">14 sources</div></div>
+        <div class="row"><div class="av">CAL</div><div class="l">Discovery call booked · Tue 10:00</div><div class="v">Confirmed</div></div>
+        <div class="row"><div class="av">CRM</div><div class="l">Opportunity created — $128K ARR</div><div class="v">Stage 2</div></div>
+      </div>
+    </div>
+    <div class="tab-panel" data-panel="service">
+      <div>
+        <h3>Tier 1 belongs to agents.</h3>
+        <p>Service Agent reads the case, the order history, and the knowledge base — then resolves or hands off to a human with a clean summary, never a cold transfer.</p>
+        <ul class="bullets">
+          <li><span class="check"></span>Containment up 38% on the cases that should never have been human</li>
+          <li><span class="check"></span>Every escalation lands with a structured summary in Slack</li>
+          <li><span class="check"></span>Trust Layer redacts PII before any model sees it</li>
+        </ul>
+      </div>
+      <div class="tab-illus">
+        <div class="row"><div class="av">CASE</div><div class="l">Refund request — order #88241</div><div class="v">Open</div></div>
+        <div class="row active"><div class="av">SVC</div><div class="l">Service Agent — policy match</div><div class="v">Resolved · 1:14</div></div>
+        <div class="row"><div class="av">EMA</div><div class="l">Customer notified by email</div><div class="v">Sent</div></div>
+        <div class="row"><div class="av">CSAT</div><div class="l">Post-resolution survey</div><div class="v">5 / 5</div></div>
+      </div>
+    </div>
+    <div class="tab-panel" data-panel="marketing">
+      <div>
+        <h3>Campaigns that compose themselves.</h3>
+        <p>Marketing Cloud + Agentforce build segments from Data 360 in real time, draft channel-specific copy, run experiments, and roll the winner — with brand and legal guardrails baked in.</p>
+        <ul class="bullets">
+          <li><span class="check"></span>Segment build from natural-language prompt, grounded in Data 360</li>
+          <li><span class="check"></span>Brand-voice constrained generation — no rogue copy</li>
+          <li><span class="check"></span>Closed-loop attribution back into Sales Cloud pipeline</li>
+        </ul>
+      </div>
+      <div class="tab-illus">
+        <div class="row active"><div class="av">SEG</div><div class="l">Segment: lapsed enterprise renewals</div><div class="v">12,840</div></div>
+        <div class="row"><div class="av">DRA</div><div class="l">Email + LinkedIn variants drafted</div><div class="v">8 variants</div></div>
+        <div class="row"><div class="av">EXP</div><div class="l">A/B/n experiment running</div><div class="v">Day 2</div></div>
+        <div class="row"><div class="av">PIP</div><div class="l">Pipeline influenced</div><div class="v">$3.6M</div></div>
+      </div>
+    </div>
+    <div class="tab-panel" data-panel="it">
+      <div>
+        <h3>Govern the agents like you govern the data.</h3>
+        <p>The Einstein Trust Layer gives IT auditable prompts, masked PII, scoped permissions, and zero-data-retention contracts with model providers — all on metadata you already control.</p>
+        <ul class="bullets">
+          <li><span class="check"></span>Field-level security inherited automatically by every agent</li>
+          <li><span class="check"></span>Full audit trail of every prompt, output, and action</li>
+          <li><span class="check"></span>Bring your own model — Anthropic, OpenAI, or Atlas</li>
+        </ul>
+      </div>
+      <div class="tab-illus">
+        <div class="row"><div class="av">FLS</div><div class="l">Field-level security applied</div><div class="v">Auto</div></div>
+        <div class="row active"><div class="av">PII</div><div class="l">Trust Layer · masking active</div><div class="v">42 fields</div></div>
+        <div class="row"><div class="av">LOG</div><div class="l">Audit log streamed to Splunk</div><div class="v">Live</div></div>
+        <div class="row"><div class="av">MDL</div><div class="l">Model: Anthropic Claude (BYOM)</div><div class="v">ZDR</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section deeper">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section">From CRM to agentic enterprise — in five steps.</h2>
+      <p class="section-lede">A repeatable sequence the Salesforce Professional Services team runs with every Agentforce customer.</p>
+    </div>
+    <div class="steps">
+      <div class="step open" data-step><div class="step-head"><div class="step-num">01</div><div class="step-title">Unify the record on Customer 360</div><div class="step-tag">Week 1–4</div></div><div class="step-body"><div class="step-body-inner">Consolidate Sales, Service and Marketing onto one set of objects, one permission model, and one workflow engine. The agentic layer is only as good as the records underneath it.</div></div></div>
+      <div class="step" data-step><div class="step-head"><div class="step-num">02</div><div class="step-title">Activate Data 360 as the live profile</div><div class="step-tag">Week 3–8</div></div><div class="step-body"><div class="step-body-inner">Zero-copy connect to Snowflake, Databricks, S3, Workday and your billing system. Build the unified profile once — every agent reads from the same source of truth.</div></div></div>
+      <div class="step" data-step><div class="step-head"><div class="step-num">03</div><div class="step-title">Configure your first three agents</div><div class="step-tag">Week 6–10</div></div><div class="step-body"><div class="step-body-inner">Start narrow: a service triage agent, an SDR agent, an internal HR helpdesk agent. Each one ships behind a feature flag with full Trust Layer logging from day one.</div></div></div>
+      <div class="step" data-step><div class="step-head"><div class="step-num">04</div><div class="step-title">Bring agents into Slack</div><div class="step-tag">Week 10–14</div></div><div class="step-body"><div class="step-body-inner">Promote the agents from a sidebar to the work surface. Slack channels become the audit trail — every escalation, every approval, every decision threaded with the customer record attached.</div></div></div>
+      <div class="step" data-step><div class="step-head"><div class="step-num">05</div><div class="step-title">Scale and govern with the Trust Layer</div><div class="step-tag">Ongoing</div></div><div class="step-body"><div class="step-body-inner">Roll new agents out behind the same audit, masking and permissioning controls. Hit the policy bar once — every future agent inherits it.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section">Measured. Proven. Repeatable.</h2>
+      <p class="section-lede">Three production benchmarks across the Agentforce install base — pulled from active customer telemetry, not lab tests.</p>
+    </div>
+    <div class="radials">
+      <div class="radial-card">
+        <div class="radial">
+          <svg viewBox="0 0 220 220">
+            <circle class="track" cx="110" cy="110" r="92"/>
+            <circle class="bar"   cx="110" cy="110" r="92" stroke-dasharray="578" stroke-dashoffset="125"/>
+          </svg>
+          <div class="v">79%</div>
+        </div>
+        <div class="desc">of cases auto-resolved or summarized before a human reads them.</div>
+      </div>
+      <div class="radial-card">
+        <div class="radial">
+          <svg viewBox="0 0 220 220">
+            <circle class="track" cx="110" cy="110" r="92"/>
+            <circle class="bar deep" cx="110" cy="110" r="92" stroke-dasharray="578" stroke-dashoffset="289"/>
+          </svg>
+          <div class="v">50%</div>
+        </div>
+        <div class="desc">drop in pipeline-leakage when SDR Agent works the inbound queue overnight.</div>
+      </div>
+      <div class="radial-card">
+        <div class="radial">
+          <svg viewBox="0 0 220 220">
+            <circle class="track" cx="110" cy="110" r="92"/>
+            <circle class="bar"   cx="110" cy="110" r="92" stroke-dasharray="578" stroke-dashoffset="38"/>
+          </svg>
+          <div class="v">93%</div>
+        </div>
+        <div class="desc">of admins pass security review on the first attempt with the Trust Layer enabled.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section light">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section">A platform agent — not a chat bolt-on.</h2>
+      <p class="section-lede">How the agentic layer in Salesforce compares to point AI tools and DIY copilots stitched on top of a generic LLM.</p>
+    </div>
+    <div class="compare">
+      <div class="compare-row head"><div>Capability</div><div>Point AI tools</div><div class="winner">Salesforce + Agentforce</div></div>
+      <div class="compare-row"><div class="label">Grounded in CRM data</div><div><span class="dotmark muted"></span>Bring-your-own integration</div><div class="winner"><span class="dotmark"></span>Native to Customer 360 metadata</div></div>
+      <div class="compare-row"><div class="label">Real-time profile</div><div><span class="dotmark muted"></span>Nightly batch ETL</div><div class="winner"><span class="dotmark"></span>Data 360 zero-copy, live</div></div>
+      <div class="compare-row"><div class="label">Trust &amp; governance</div><div><span class="dotmark muted"></span>Custom DLP policies</div><div class="winner"><span class="dotmark"></span>Einstein Trust Layer, FLS-aware, ZDR</div></div>
+      <div class="compare-row"><div class="label">Conversational surface</div><div><span class="dotmark muted"></span>Standalone chat app</div><div class="winner"><span class="dotmark"></span>In Slack, in CRM, in your portal</div></div>
+      <div class="compare-row"><div class="label">Time to first agent</div><div><span class="dotmark muted"></span>3–6 months engineering</div><div class="winner"><span class="dotmark"></span>Days with prebuilt skills</div></div>
+      <div class="compare-row"><div class="label">ROI verified</div><div><span class="dotmark muted"></span>Anecdotal</div><div class="winner"><span class="dotmark"></span>233% three-year ROI (IDC)</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section deeper">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section">Built for the industries you operate in.</h2>
+      <p class="section-lede">Pre-tuned data models, agents, and skills for the verticals where Customer 360 already runs.</p>
+    </div>
+    <div class="industry-grid">
+      <div class="industry-card">
+        <h3>Financial<br>Services</h3>
+        <p>Connect with customers proactively to deliver AI-powered, high-value experiences.</p>
+        <div class="ic-foot"><span class="learn">Learn more</span><span class="ic-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="14" rx="2"/><path d="M4 10h16M9 14h2"/></svg></span></div>
+      </div>
+      <div class="industry-card">
+        <h3>Retail</h3>
+        <p>Acquire profitable customers faster with unified, real-time data.</p>
+        <div class="ic-foot"><span class="learn">Learn more</span><span class="ic-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14l-1.2 11a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"/><path d="M9 8a3 3 0 1 1 6 0"/></svg></span></div>
+      </div>
+      <div class="industry-card">
+        <h3>Healthcare &amp;<br>Life Sciences</h3>
+        <p>Elevate your workforce with AI agents for healthier businesses, outcomes, and communities.</p>
+        <div class="ic-foot"><span class="learn">Learn more</span><span class="ic-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-7-10a4.5 4.5 0 0 1 7-3.7A4.5 4.5 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></span></div>
+      </div>
+      <div class="industry-card">
+        <h3>Construction &amp;<br>Real Estate</h3>
+        <p>Streamline processes and achieve operational excellence to drive profitability and growth.</p>
+        <div class="ic-foot"><span class="learn">Learn more</span><span class="ic-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-7h6v7"/></svg></span></div>
+      </div>
+      <div class="industry-card">
+        <h3>Education</h3>
+        <p>Boost productivity and enhance 24/7 student support with purpose-built AI for education.</p>
+        <div class="ic-foot"><span class="learn">Learn more</span><span class="ic-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9l10-5 10 5-10 5L2 9z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></span></div>
+      </div>
+      <div class="industry-card">
+        <h3>Professional<br>Services</h3>
+        <p>Increase client trust, recruit and retain the right talent, and build a vibrant work culture.</p>
+        <div class="ic-foot"><span class="learn">Learn more</span><span class="ic-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></span></div>
+      </div>
+      <div class="industry-card">
+        <h3>Technology</h3>
+        <p>Automate workflows, unify and integrate data, and thrive in a new era of tech, powered by trusted AI.</p>
+        <div class="ic-foot"><span class="learn">Learn more</span><span class="ic-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.5 5.5l2 2M16.5 16.5l2 2M5.5 18.5l2-2M16.5 7.5l2-2"/></svg></span></div>
+      </div>
+      <div class="industry-card">
+        <h3>Manufacturing</h3>
+        <p>Integrate all your data across a unified value chain to better serve customers and channel partners.</p>
+        <div class="ic-foot"><span class="learn">Learn more</span><span class="ic-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section">Six guarantees, on by default.</h2>
+      <p class="section-lede">The Trust Layer extends every control your admins already use — to every prompt, output, and action your agents take.</p>
+    </div>
+    <div class="icon-grid">
+      <div class="icon-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg></div><h4>Field-level security inherited</h4><p>Agents only see what the user is allowed to see. Permissions, sharing rules and FLS flow through every call.</p></div>
+      <div class="icon-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></div><h4>Zero data retention</h4><p>ZDR contracts with every model provider — Anthropic, OpenAI, Azure. Your prompts and outputs never leave the trust boundary.</p></div>
+      <div class="icon-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 10h8M8 14h5"/></svg></div><h4>Sensitive data never sees a model</h4><p>Names, emails, account numbers and custom-tagged fields are masked before prompt assembly and unmasked client-side.</p></div>
+      <div class="icon-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div><h4>Every prompt logged and queryable</h4><p>Stream prompts, outputs and tool calls into Splunk, Datadog or Data Cloud. Reproduce any agent decision after the fact.</p></div>
+      <div class="icon-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M4 12h16"/></svg></div><h4>Anthropic, OpenAI, Atlas — your call</h4><p>Route different agents to different models on a per-skill basis. Pin a model version. Roll forward when you're ready.</p></div>
+      <div class="icon-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/></svg></div><h4>Outputs scored before they ship</h4><p>Every generated response is scored for toxicity, bias and brand-voice drift. Below threshold, the agent retries silently.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section deeper">
+  <div class="wrap">
+    <div class="section-head" style="position: relative;">
+      <h2 class="h-section">In production today.</h2>
+      <p class="section-lede">A few of the 150,000+ teams running on Customer 360 — and what changed when Agentforce shipped.</p>
+    </div>
+    <div class="scroll-wrap">
+      <div class="scroll-arrows">
+        <button data-scroll="-1" aria-label="Scroll left">‹</button>
+        <button data-scroll="1" aria-label="Scroll right">›</button>
+      </div>
+      <div class="scroll-rail" id="rail">
+        <div class="scroll-card"><div class="industry">Financial Services</div><p class="quote">"Service Agent contained 38% of cases on day one. We didn't lose a single CSAT point."</p><div class="who"><div class="av">RB</div><div><div class="name">Renata Bell</div><div class="role">VP Customer Operations, Northwind Bank</div></div></div></div>
+        <div class="scroll-card"><div class="industry">Manufacturing</div><p class="quote">"Our SDR Agent works the inbound queue at 3am. Pipeline is up 31% with the same headcount."</p><div class="who"><div class="av">DM</div><div><div class="name">Daniel Marinov</div><div class="role">CRO, Helios Industrial</div></div></div></div>
+        <div class="scroll-card"><div class="industry">Retail</div><p class="quote">"Data 360 finally gave us one customer profile across e-commerce, store, and loyalty. The agents were the easy part."</p><div class="who"><div class="av">SO</div><div><div class="name">Sade Okonkwo</div><div class="role">SVP Digital, Marigold &amp; Co.</div></div></div></div>
+        <div class="scroll-card"><div class="industry">Healthcare</div><p class="quote">"PII masking was the difference between a six-month security review and a two-week launch."</p><div class="who"><div class="av">JT</div><div><div class="name">James Tanaka</div><div class="role">CISO, Beacon Health</div></div></div></div>
+        <div class="scroll-card"><div class="industry">Technology</div><p class="quote">"We moved off three point AI tools and consolidated everything onto Agentforce. Saved a budget line."</p><div class="who"><div class="av">EV</div><div><div class="name">Elena Vargas</div><div class="role">CTO, Lumen Cloud</div></div></div></div>
+        <div class="scroll-card"><div class="industry">Public Sector</div><p class="quote">"Audit log streaming to Splunk closed the gap our compliance team flagged in 2024."</p><div class="who"><div class="av">PR</div><div><div class="name">Priya Ramaswamy</div><div class="role">Director of IT, State of Cascadia</div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section">A platform that pays back, line by line.</h2>
+      <p class="section-lede">Click any value driver to see what we've measured across the install base.</p>
+    </div>
+    <div class="accordion">
+      <div class="acc-row open" data-acc><div class="acc-head"><div class="acc-num">01</div><div class="acc-title">Replace point AI tools with one agentic layer</div><div class="acc-toggle">+</div></div><div class="acc-body"><div class="acc-body-inner"><div>The average enterprise is paying for 4–7 standalone AI products. Agentforce consolidates that spend into one platform with shared trust, shared data, and shared workflow — without losing the depth of any single use case.</div><div><div class="mini-stat">$1.4M</div><div class="mini-stat-label">Avg. annual consolidation</div></div></div></div></div>
+      <div class="acc-row" data-acc><div class="acc-head"><div class="acc-num">02</div><div class="acc-title">Cut case handle time without cutting CSAT</div><div class="acc-toggle">+</div></div><div class="acc-body"><div class="acc-body-inner"><div>Service Agent triages, drafts, and resolves Tier 1 cases. Human reps step in earlier on the cases that actually need them — and walk in with a structured summary instead of a cold transfer.</div><div><div class="mini-stat">42%</div><div class="mini-stat-label">Faster resolution</div></div></div></div></div>
+      <div class="acc-row" data-acc><div class="acc-head"><div class="acc-num">03</div><div class="acc-title">Lift pipeline without lifting headcount</div><div class="acc-toggle">+</div></div><div class="acc-body"><div class="acc-body-inner"><div>SDR Agent works the inbound queue 24/7. Reps focus on closing the meetings the agent has already qualified, briefed, and scheduled.</div><div><div class="mini-stat">31%</div><div class="mini-stat-label">More qualified pipeline</div></div></div></div></div>
+      <div class="acc-row" data-acc><div class="acc-head"><div class="acc-num">04</div><div class="acc-title">Ship faster than DIY copilots</div><div class="acc-toggle">+</div></div><div class="acc-body"><div class="acc-body-inner"><div>Pre-built skills, native CRM grounding and the Trust Layer mean a configuration job — not an engineering project. Most customers hit production in weeks, not quarters.</div><div><div class="mini-stat">9.4&times;</div><div class="mini-stat-label">Faster time-to-agent</div></div></div></div></div>
+      <div class="acc-row" data-acc><div class="acc-head"><div class="acc-num">05</div><div class="acc-title">Pass security review on the first pass</div><div class="acc-toggle">+</div></div><div class="acc-body"><div class="acc-body-inner"><div>Field-level security, PII masking, ZDR contracts and audit log streaming are on by default. CISOs sign off because the controls are the same ones that have governed Customer 360 for a decade.</div><div><div class="mini-stat">2 wk</div><div class="mini-stat-label">Avg. security review</div></div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section deeper">
+  <div class="wrap">
+    <div class="pull">
+      <blockquote>The next ten years of work belong to teams of <span class="grad">humans and agents</span>, working together on a single source of customer truth.</blockquote>
+      <cite><b>Marc Benioff</b> — Chair &amp; CEO, Salesforce · Dreamforce keynote, 2025</cite>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-inner">
+      <div>
+        <h2>Build your first agent before the end of the quarter.</h2>
+        <p>Spin up a Salesforce trial, point Data 360 at one source system, and ship a service triage agent into Slack — all inside a single sprint.</p>
+        <div class="cta-actions">
+          <button class="btn-primary">Start free trial</button>
+          <button class="btn-ghost">Talk to a specialist</button>
+        </div>
+      </div>
+      <aside class="cta-side">
+        <h4>What's in the trial</h4>
+        <ul>
+          <li>Customer 360 sandbox, fully provisioned</li>
+          <li>Agentforce Service &amp; SDR Agent templates</li>
+          <li>Data 360 zero-copy connector pack</li>
+          <li>Slack workspace pre-wired to your trial org</li>
+          <li>Trust Layer policies on by default</li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <div>© 2026 Salesforce, Inc. — Brand demo (Electric Blue 30 surface).</div>
+    <div>Iteration 2 · Salesforce Sans &amp; Avant Garde For Salesforce</div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('[data-reveal]').forEach(card => card.addEventListener('click', () => card.classList.toggle('open')));
+document.querySelectorAll('[data-step]').forEach(step => step.addEventListener('click', () => {
+  const wasOpen = step.classList.contains('open');
+  document.querySelectorAll('[data-step]').forEach(s => s.classList.remove('open'));
+  if (!wasOpen) step.classList.add('open');
+}));
+document.querySelectorAll('[data-acc]').forEach(row => row.addEventListener('click', () => {
+  const wasOpen = row.classList.contains('open');
+  document.querySelectorAll('[data-acc]').forEach(r => r.classList.remove('open'));
+  if (!wasOpen) row.classList.add('open');
+}));
+document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => {
+  const target = btn.dataset.tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === target));
+}));
+const rail = document.getElementById('rail');
+document.querySelectorAll('[data-scroll]').forEach(b => b.addEventListener('click', () => {
+  const dir = parseInt(b.dataset.scroll, 10);
+  rail.scrollBy({ left: dir * 380, behavior: 'smooth' });
+}));
+</script>
+</body>
+</html>

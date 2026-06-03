@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Salesforce — The Agentic Era · Slide deck</title>
+<style>
+@font-face { font-family: 'Salesforce Sans'; src: url('../../assets/fonts/SalesforceSans-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Salesforce Sans'; src: url('../../assets/fonts/SalesforceSans-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Salesforce Sans'; src: url('../../assets/fonts/SalesforceSans-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Salesforce Sans'; src: url('../../assets/fonts/SalesforceSans-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Salesforce Sans'; src: url('../../assets/fonts/SalesforceSans-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Avant Garde For Salesforce'; src: url('../../assets/fonts/AvantGardeForSalesforce-Demi.otf') format('opentype'); font-weight: 100 900; font-style: normal; font-display: swap; }
+
+:root {
+  --cloud-90:    #cfe9fe;
+  --cloud-70:    #00b3ff;
+  --electric-50: #066afe;
+  --electric-30: #022ac0;
+  --electric-20: #002775;
+  --electric-15: #001a52;
+
+  --aurora: linear-gradient(110deg, #00b3ff 0%, #066afe 35%, #7c3aed 70%, #00b5cc 100%);
+
+  --bg:        var(--cloud-90);
+  --bg-deep:   var(--electric-20);
+  --bg-mid:    var(--electric-30);
+
+  --text:      var(--electric-20);
+  --text-dim:  #1a3370;
+  --text-muted:#5b6b9a;
+  --text-on-deep: #ffffff;
+  --text-on-deep-dim: rgba(255,255,255,0.78);
+
+  --border:        #b9d6f5;
+  --border-light:  #d6e6fa;
+  --border-deep:   rgba(255,255,255,0.18);
+
+  --font:         'Salesforce Sans', -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Avant Garde For Salesforce', 'Salesforce Sans', -apple-system, sans-serif;
+
+  --radius:    8px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
+body { font-family: var(--font); color: var(--text); -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display:block; }
+button { font-family: inherit; }
+
+/* ===================== DECK FRAME ===================== */
+.deck {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #000;
+}
+/* 16:9 stage */
+.stage {
+  position: relative;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute; inset: 0;
+  padding: 6% 7%;
+  display: flex; flex-direction: column;
+  opacity: 0; transform: translateX(40px);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1);
+  pointer-events: none;
+  background: var(--bg);
+}
+.slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+.slide.exit-left  { opacity: 0; transform: translateX(-40px); }
+.slide.exit-right { opacity: 0; transform: translateX(40px); }
+.slide.enter-right { opacity: 0; transform: translateX(40px); }
+.slide.enter-left  { opacity: 0; transform: translateX(-40px); }
+
+/* ===================== ELEMENT-LEVEL ENTRANCE ANIMATIONS ===================== */
+/* Hidden until parent slide gets .active. Then animate in with optional --d delay. */
+@keyframes anim-rise   { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes anim-fall   { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: none; } }
+@keyframes anim-slide-r { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
+@keyframes anim-slide-l { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: none; } }
+@keyframes anim-zoom   { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: none; } }
+@keyframes anim-pop    { 0% { opacity: 0; transform: scale(0.6); } 70% { transform: scale(1.06); } 100% { opacity: 1; transform: scale(1); } }
+
+.slide:not(.active) [data-anim]            { opacity: 0; }
+.slide.active [data-anim="rise"]           { animation: anim-rise .8s var(--d,0s) cubic-bezier(.2,.7,.2,1) both; }
+.slide.active [data-anim="fall"]           { animation: anim-fall .8s var(--d,0s) cubic-bezier(.2,.7,.2,1) both; }
+.slide.active [data-anim="slide-r"]        { animation: anim-slide-r .9s var(--d,0s) cubic-bezier(.2,.7,.2,1) both; }
+.slide.active [data-anim="slide-l"]        { animation: anim-slide-l .9s var(--d,0s) cubic-bezier(.2,.7,.2,1) both; }
+.slide.active [data-anim="zoom"]           { animation: anim-zoom .8s var(--d,0s) cubic-bezier(.2,.7,.2,1) both; }
+.slide.active [data-anim="pop"]            { animation: anim-pop .7s var(--d,0s) cubic-bezier(.2,.7,.2,1) both; }
+
+/* shimmer gradient on key phrases (e.g. "#1 Agentic CRM") */
+.grad-shimmer {
+  background: linear-gradient(110deg, #00b3ff 0%, #066afe 22%, #7c3aed 50%, #00b5cc 78%, #00b3ff 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: gradient-pan 6s ease-in-out infinite;
+}
+@keyframes gradient-pan { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+/* glow pulse for featured cards / cloud-blue accents */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px var(--cloud-70), 0 0 24px -4px rgba(0,179,255,0.4); }
+  50%      { box-shadow: 0 0 0 2px var(--cloud-70), 0 0 36px 0px rgba(0,179,255,0.7); }
+}
+.slide.active .pulse-glow { animation: glow-pulse 2.6s 1.2s ease-in-out infinite; }
+
+.slide.deep {
+  background:
+    radial-gradient(ellipse at 18% 10%, rgba(0,179,255,0.32) 0%, transparent 55%),
+    radial-gradient(ellipse at 95% 90%, rgba(6,106,254,0.45) 0%, transparent 55%),
+    linear-gradient(160deg, var(--electric-20) 0%, var(--electric-30) 70%, var(--electric-50) 110%);
+  color: #fff;
+}
+.slide.mid {
+  background: linear-gradient(160deg, var(--electric-30) 0%, var(--electric-20) 100%);
+  color: #fff;
+}
+.slide.deep::after, .slide.mid::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1.2px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.1) 60%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.1) 60%, transparent);
+  pointer-events: none;
+}
+
+/* Salesforce logo, top-right of every slide */
+.slide-logo {
+  position: absolute; top: 4%; right: 4.5%;
+  height: clamp(20px, 2.4vw, 36px); width: auto; z-index: 6;
+}
+.slide.deep .slide-logo, .slide.mid .slide-logo { filter: brightness(0) invert(1); }
+
+/* Counter + progress + arrows */
+.deck-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(0,39,117,0.12); z-index: 8; }
+.slide.deep ~ .deck-progress, .slide.mid ~ .deck-progress { background: rgba(255,255,255,0.14); }
+.deck-progress > i { display:block; height:100%; width: 0%; background: var(--cloud-70); transition: width .4s ease; }
+
+.deck-counter {
+  position: fixed; bottom: 14px; right: 22px; z-index: 9;
+  font: 700 11px/1 var(--font); letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+}
+.deck-nav {
+  position: fixed; bottom: 12px; left: 22px; display: flex; gap: 8px; z-index: 9;
+}
+.deck-nav button {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; cursor: pointer; font-size: 16px; line-height: 1;
+  transition: all .2s;
+}
+.deck-nav button:hover:not(:disabled) { background: var(--cloud-70); border-color: var(--cloud-70); }
+.deck-nav button:disabled { opacity: 0.3; cursor: default; }
+.deck-hint { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 9; font: 600 11px/1 var(--font); letter-spacing: 0.14em; color: rgba(255,255,255,0.45); text-transform: uppercase; }
+
+/* ===================== TYPE ===================== */
+.t-display {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6.4vw, 108px);
+  line-height: 1; letter-spacing: -0.025em;
+}
+.t-title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5vw, 84px);
+  line-height: 1.04; letter-spacing: -0.022em;
+}
+.t-subtitle {
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: clamp(20px, 2.2vw, 36px);
+  line-height: 1.35; color: var(--text-dim);
+}
+.slide.deep .t-subtitle, .slide.mid .t-subtitle { color: var(--text-on-deep-dim); }
+
+.body-1 { font-size: clamp(16px, 1.6vw, 26px); line-height: 1.55; color: var(--text-dim); }
+.slide.deep .body-1, .slide.mid .body-1 { color: var(--text-on-deep-dim); }
+.body-2 { font-size: clamp(14px, 1.3vw, 22px); line-height: 1.5; color: var(--text-muted); }
+.slide.deep .body-2, .slide.mid .body-2 { color: rgba(255,255,255,0.6); }
+
+.grad { background: var(--aurora); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* ===================== SLIDE 1 — TITLE ===================== */
+.title-slide { justify-content: center; }
+.title-slide .lockup { display: flex; align-items: center; gap: 5%; max-width: 86%; }
+.title-slide .lockup .copy { flex: 1.4; }
+.title-slide .lockup .mark { flex: 1; display: flex; justify-content: center; }
+.title-slide h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(56px, 7vw, 120px); line-height: 1.02; letter-spacing: -0.03em;
+  color: #fff;
+}
+.title-slide h1 .accent { color: var(--cloud-70); display:block; }
+.title-slide .meta {
+  margin-top: clamp(20px, 3vh, 40px);
+  font-size: clamp(16px, 1.5vw, 22px); color: rgba(255,255,255,0.78);
+}
+.title-mark {
+  width: clamp(180px, 22vw, 360px); height: auto;
+  filter: brightness(0) invert(1);
+}
+
+/* ===================== SLIDE 2 — HERO HEADLINE ===================== */
+.hero-slide { justify-content: center; }
+.hero-slide .copy { max-width: 88%; }
+.hero-slide h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(56px, 7.6vw, 132px); line-height: 1; letter-spacing: -0.03em;
+  color: #fff;
+}
+.hero-slide h1 .l { display: block; }
+
+.hero-slide p.lede {
+  margin: clamp(20px, 3vh, 36px) 0 0;
+  max-width: 60ch;
+  font-size: clamp(16px, 1.7vw, 26px); line-height: 1.55;
+  color: rgba(255,255,255,0.85);
+}
+
+.hero-slide .actions {
+  margin-top: clamp(20px, 3vh, 40px);
+  display: flex; gap: 14px; flex-wrap: wrap;
+}
+
+.hero-slide .meta-bar {
+  margin-top: clamp(28px, 4vh, 60px);
+  border-top: 1px solid rgba(255,255,255,0.18);
+  padding-top: clamp(14px, 2vh, 24px);
+  display: grid; grid-template-columns: repeat(3, max-content); gap: clamp(28px, 5vw, 60px);
+}
+.hero-slide .meta-bar .v { font-family: var(--font-display); font-size: clamp(22px, 2.2vw, 34px); line-height: 1; color: #fff; }
+.hero-slide .meta-bar .l { margin-top: 6px; font-size: clamp(12px, 1.05vw, 16px); color: rgba(255,255,255,0.7); }
+
+/* hero floating orbs (animated) */
+.hero-orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(50px); opacity: 0.55; pointer-events: none; z-index: 0;
+  animation: float 18s ease-in-out infinite;
+}
+.hero-orb.a { width: 32%; aspect-ratio: 1; top: -10%; left: -8%; background: #00b3ff; }
+.hero-orb.b { width: 26%; aspect-ratio: 1; bottom: -12%; right: 6%; background: #066afe; animation-delay: -6s; }
+.hero-orb.c { width: 16%; aspect-ratio: 1; top: 30%; right: 28%; background: #00b5cc; opacity: 0.35; animation-delay: -12s; }
+@keyframes float {
+  0%, 100% { transform: translate3d(0,0,0); }
+  33%      { transform: translate3d(3%, -2%, 0); }
+  66%      { transform: translate3d(-2%, 1.5%, 0); }
+}
+
+/* ===================== SLIDE — BOLD STATEMENT ===================== */
+.bold-slide { align-items: flex-start; justify-content: center; }
+.bold-slide h2 {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: clamp(56px, 7.4vw, 128px); line-height: 1.05; letter-spacing: -0.025em;
+  color: #fff; max-width: 18ch;
+  margin: 0;
+}
+.bold-slide .hi { color: var(--cloud-70); }
+.bold-slide h2[data-words] { display: flex; flex-wrap: wrap; gap: 0.18em 0.32em; }
+.bold-slide h2[data-words] > span { display: inline-block; }
+
+/* ===================== STAT BAND SLIDE ===================== */
+.section-head { margin-bottom: clamp(24px, 4vh, 50px); max-width: 80%; }
+.section-head h2 { margin: 0; }
+.section-head p { margin-top: clamp(8px, 1.5vh, 18px); }
+
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 2.5vw, 36px); flex: 1; align-content: center; }
+.stat-cell .num {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6vw, 96px); line-height: 1; letter-spacing: -0.025em;
+  background: var(--aurora);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.stat-cell .label { margin-top: 14px; font-weight: 700; font-size: clamp(14px, 1.3vw, 18px); color: var(--electric-20); }
+.stat-cell .desc  { margin-top: 6px; font-size: clamp(12px, 1.1vw, 15px); color: var(--text-muted); line-height: 1.55; max-width: 28ch; }
+.slide.deep .stat-cell .label, .slide.mid .stat-cell .label { color: #fff; }
+.slide.deep .stat-cell .desc, .slide.mid .stat-cell .desc { color: rgba(255,255,255,0.7); }
+
+/* ===================== SPLIT VALUE SLIDE ===================== */
+.split-slide { flex-direction: row !important; align-items: center; gap: clamp(24px, 4vw, 64px); }
+.split-slide > .copy { flex: 1.05; }
+.split-slide > .visual {
+  flex: 1; align-self: stretch;
+  position: relative;
+  background: linear-gradient(165deg, #fff 0%, var(--cloud-90) 100%);
+  border-radius: var(--radius-xl);
+  padding: clamp(16px, 2.5vw, 36px);
+  display: flex; flex-direction: column; justify-content: center;
+  box-shadow: 0 30px 60px -40px rgba(0,39,117,0.45);
+}
+.orbit-card {
+  background: #fff; border: 1px solid var(--border-light);
+  border-radius: 14px; padding: clamp(10px, 1.4vw, 18px) clamp(12px, 1.6vw, 22px);
+  display: flex; align-items: center; gap: clamp(8px, 1.2vw, 14px); margin-bottom: clamp(8px, 1.2vh, 14px);
+}
+.orbit-card .badge {
+  width: clamp(28px, 2.6vw, 40px); aspect-ratio: 1; border-radius: 10px;
+  background: var(--cloud-70); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font: 700 clamp(10px, 1vw, 13px)/1 var(--font);
+}
+.orbit-card .b1 { background: var(--electric-50); }
+.orbit-card .b2 { background: var(--electric-30); }
+.orbit-card .b3 { background: var(--electric-20); }
+.orbit-card .meta { flex: 1; min-width: 0; }
+.orbit-card .t { font-weight: 700; font-size: clamp(12px, 1.1vw, 15px); color: var(--electric-20); }
+.orbit-card .s { font-size: clamp(11px, 1vw, 13px); color: var(--text-muted); margin-top: 2px; }
+.orbit-card .stat-mini { font-family: var(--font-display); font-size: clamp(14px, 1.4vw, 20px); color: var(--electric-30); }
+.orbit-card.featured { border-color: var(--cloud-70); box-shadow: 0 0 0 2px var(--cloud-70); }
+
+.actions { margin-top: clamp(16px, 2.5vh, 28px); display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--cloud-70); color: #fff;
+  font: 700 clamp(12px, 1.1vw, 15px)/1 var(--font);
+  letter-spacing: 0.02em;
+  padding: clamp(11px, 1.3vw, 16px) clamp(20px, 2.2vw, 32px);
+  border: none; border-radius: 999px; cursor: pointer;
+  transition: background .2s, transform .2s;
+}
+.btn-primary:hover { background: var(--electric-50); transform: translateY(-1px); }
+.btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--electric-20);
+  font: 700 clamp(12px, 1.1vw, 15px)/1 var(--font);
+  padding: clamp(11px, 1.3vw, 16px) clamp(18px, 2vw, 28px);
+  border: 1.5px solid var(--electric-20); border-radius: 999px; cursor: pointer;
+}
+.btn-ghost:hover { background: var(--electric-20); color: #fff; }
+.slide.deep .btn-ghost, .slide.mid .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.5); }
+.slide.deep .btn-ghost:hover, .slide.mid .btn-ghost:hover { background: #fff; color: var(--electric-20); border-color: #fff; }
+
+/* ===================== COMPARISON SLIDE ===================== */
+.compare {
+  border: 1px solid var(--border-light); border-radius: var(--radius-xl);
+  overflow: hidden; background: #fff; flex: 1; align-self: stretch;
+  display: flex; flex-direction: column;
+  box-shadow: 0 30px 60px -40px rgba(0,39,117,0.4);
+}
+.compare-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr; border-bottom: 1px solid var(--border-light); flex: 1; }
+.compare-row:last-child { border-bottom: 0; }
+.compare-row > div { padding: clamp(10px, 1.6vh, 22px) clamp(14px, 2vw, 28px); font-size: clamp(13px, 1.2vw, 17px); color: var(--text-dim); display: flex; align-items: center; }
+.compare-row.head > div { font: 700 clamp(11px, 1vw, 14px)/1 var(--font); color: var(--electric-20); background: var(--cloud-90); letter-spacing: 0.04em; }
+.compare-row.head .winner { background: var(--cloud-70); color: #fff; }
+.compare-row .winner { background: rgba(0,179,255,0.07); color: var(--electric-20); font-weight: 600; }
+.compare-row .label { color: var(--electric-20); font-weight: 600; }
+.dotmark { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--cloud-70); margin-right: 10px; flex-shrink: 0; }
+.dotmark.muted { background: #5b6b9a; opacity: 0.55; }
+
+/* ===================== RADIAL STATS SLIDE ===================== */
+.radials { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 40px); flex: 1; align-content: center; }
+.radial-card {
+  background: #fff; border-radius: var(--radius-xl); padding: clamp(18px, 2.6vw, 36px);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  box-shadow: 0 30px 60px -40px rgba(0,39,117,0.4);
+}
+.radial { position: relative; width: clamp(140px, 16vw, 240px); aspect-ratio: 1; }
+.radial svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.radial .track { fill: none; stroke: rgba(0,179,255,0.18); stroke-width: 16; }
+.radial .bar   { fill: none; stroke: var(--cloud-70); stroke-width: 16; stroke-linecap: round; transition: stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1); }
+.radial .bar.deep { stroke: var(--electric-30); }
+/* When slide isn't active, drain the ring by maxing out the dash offset */
+.slide:not(.active) .radial .bar { stroke-dashoffset: 578 !important; }
+.radial .v {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: clamp(32px, 3.6vw, 60px); color: var(--electric-20);
+}
+.radial-card .desc { margin-top: clamp(12px, 2vh, 20px); font-size: clamp(13px, 1.2vw, 17px); color: var(--text-dim); max-width: 28ch; line-height: 1.5; }
+
+/* ===================== QUOTE SLIDE ===================== */
+.quote-slide { justify-content: center; align-items: center; text-align: center; }
+.quote-slide blockquote {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4.2vw, 72px); letter-spacing: -0.022em; line-height: 1.15;
+  color: #fff; margin: 0; max-width: 28ch;
+}
+.quote-slide cite {
+  display: block; margin-top: clamp(20px, 3vh, 40px);
+  font-style: normal; font-size: clamp(13px, 1.2vw, 18px);
+  color: rgba(255,255,255,0.7);
+}
+.quote-slide cite b { color: #fff; font-weight: 700; }
+
+/* ===================== CTA SLIDE ===================== */
+.cta-slide { justify-content: center; }
+.cta-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(24px, 4vw, 60px); align-items: center; }
+.cta-grid h2 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5vw, 80px); letter-spacing: -0.025em; line-height: 1.05;
+  margin: 0 0 clamp(14px, 2vh, 22px); max-width: 18ch; color: #fff;
+}
+.cta-grid p { font-size: clamp(15px, 1.4vw, 20px); line-height: 1.6; color: rgba(255,255,255,0.78); margin: 0 0 clamp(18px, 2.5vh, 30px); max-width: 56ch; }
+.cta-side {
+  background: rgba(255,255,255,0.07); border: 1px solid var(--border-deep);
+  border-radius: var(--radius-xl); padding: clamp(18px, 2.4vw, 32px);
+}
+.cta-side h4 { font-family: var(--font-display); font-size: clamp(16px, 1.5vw, 22px); color: #fff; margin: 0 0 clamp(10px, 1.5vh, 18px); }
+.cta-side ul { list-style: none; padding: 0; margin: 0; display: grid; gap: clamp(8px, 1.2vh, 14px); }
+.cta-side li { display: flex; gap: 10px; align-items: flex-start; font-size: clamp(13px, 1.15vw, 16px); color: rgba(255,255,255,0.78); }
+.cta-side li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--cloud-70); margin-top: 9px; flex-shrink: 0; box-shadow: 0 0 12px rgba(0,179,255,0.7); }
+
+/* ===================== AGENDA SLIDE ===================== */
+.agenda-grid { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(24px, 4vw, 60px); flex: 1; align-items: center; }
+.agenda-grid > .left h2 { margin: 0; }
+.agenda-list { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px) clamp(28px, 4vw, 56px); }
+.agenda-item { display: grid; grid-template-columns: clamp(56px, 5vw, 80px) 1fr; gap: clamp(10px, 1.4vw, 18px); align-items: start; }
+.agenda-item .n {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 56px); line-height: 1; color: var(--electric-50);
+}
+.agenda-item .t {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 1.6vw, 24px); line-height: 1.2; color: var(--electric-20);
+  letter-spacing: -0.01em;
+}
+
+/* ===================== FOOTER LOGO LOCKUP for title slide ===================== */
+.title-footer {
+  position: absolute; left: 7%; bottom: 8%;
+  font-size: clamp(11px, 1vw, 14px); color: rgba(255,255,255,0.6); letter-spacing: 0.06em;
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <div class="stage" id="stage">
+
+    <!-- ================ SLIDE 1 — TITLE ================ -->
+    <section class="slide deep title-slide active" data-slide>
+      <span class="hero-orb a"></span>
+      <span class="hero-orb b"></span>
+      <span class="hero-orb c"></span>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <div class="lockup">
+        <div class="copy">
+          <h1>
+            <span data-anim="rise" style="--d:.1s; display:block;">Official Salesforce</span>
+            <span class="accent grad-shimmer" data-anim="rise" style="--d:.35s; display:block;">Agentic CRM Brief</span>
+          </h1>
+          <p class="meta" data-anim="rise" style="--d:.65s;">Last edited by Brand Creative<br/>on May 8, 2026</p>
+        </div>
+      </div>
+      <div class="title-footer" data-anim="fall" style="--d:.95s;">Press → to advance · ← to go back · Home / End to jump</div>
+    </section>
+
+    <!-- ================ SLIDE 2 — HERO HEADLINE ================ -->
+    <section class="slide deep hero-slide" data-slide>
+      <span class="hero-orb a"></span>
+      <span class="hero-orb b"></span>
+      <span class="hero-orb c"></span>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <div class="copy">
+        <h1>
+          <span class="l l1" data-anim="rise" style="--d:.1s">The <span class="grad-shimmer">#1 Agentic CRM</span></span>
+          <span class="l l2" data-anim="rise" style="--d:.3s">for the next</span>
+          <span class="l l3" data-anim="rise" style="--d:.5s">decade of work.</span>
+        </h1>
+        <p class="lede" data-anim="rise" style="--d:.75s">Sales, service, marketing and commerce — unified on one trusted platform where humans and AI agents work as one team.</p>
+        <div class="actions" data-anim="rise" style="--d:.95s">
+          <button class="btn-primary">Start with Agentforce</button>
+          <button class="btn-ghost">Watch the keynote</button>
+        </div>
+        <div class="meta-bar">
+          <div data-anim="rise" style="--d:1.1s"><div class="v"><span class="count" data-from="0" data-to="150000" data-suffix="+" data-format="comma">0</span></div><div class="l">companies on Customer 360</div></div>
+          <div data-anim="rise" style="--d:1.25s"><div class="v"><span class="count" data-from="0" data-to="1" data-suffix="B+">0</span></div><div class="l">agent interactions per quarter</div></div>
+          <div data-anim="rise" style="--d:1.4s"><div class="v">#<span class="count" data-from="0" data-to="1">0</span></div><div class="l">CRM for 11 consecutive years</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ SLIDE 3 — AGENDA ================ -->
+    <section class="slide" data-slide>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <div class="agenda-grid">
+        <div class="left">
+          <h2 class="t-display" style="color: var(--electric-20);" data-anim="slide-l" style="--d:.05s">Agenda</h2>
+        </div>
+        <div class="agenda-list">
+          <div class="agenda-item" data-anim="rise" style="--d:.20s"><div class="n">01</div><div class="t">Why agentic CRM, why now</div></div>
+          <div class="agenda-item" data-anim="rise" style="--d:.30s"><div class="n">02</div><div class="t">The four-product fabric</div></div>
+          <div class="agenda-item" data-anim="rise" style="--d:.40s"><div class="n">03</div><div class="t">Outcomes already shipping</div></div>
+          <div class="agenda-item" data-anim="rise" style="--d:.50s"><div class="n">04</div><div class="t">A platform agent vs. a chat bolt-on</div></div>
+          <div class="agenda-item" data-anim="rise" style="--d:.60s"><div class="n">05</div><div class="t">Trust by default</div></div>
+          <div class="agenda-item" data-anim="rise" style="--d:.70s"><div class="n">06</div><div class="t">Building your first agent</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ SLIDE 4 — BOLD STATEMENT ================ -->
+    <section class="slide mid bold-slide" data-slide>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <h2 data-words>
+        <span class="hi" data-anim="rise" style="--d:.10s">The</span>
+        <span class="hi" data-anim="rise" style="--d:.18s">next</span>
+        <span class="hi" data-anim="rise" style="--d:.26s">decade</span>
+        <span class="hi" data-anim="rise" style="--d:.34s">of</span>
+        <span class="hi" data-anim="rise" style="--d:.42s">work</span>
+        <span data-anim="rise" style="--d:.55s">belongs</span>
+        <span data-anim="rise" style="--d:.63s">to</span>
+        <span data-anim="rise" style="--d:.71s">teams</span>
+        <span data-anim="rise" style="--d:.79s">of</span>
+        <span data-anim="rise" style="--d:.87s">humans</span>
+        <span data-anim="rise" style="--d:.95s">and</span>
+        <span data-anim="rise" style="--d:1.03s">agents.</span>
+      </h2>
+    </section>
+
+    <!-- ================ SLIDE 5 — STAT BAND ================ -->
+    <section class="slide" data-slide>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <div class="section-head">
+        <h2 class="t-title" data-anim="slide-l" style="color: var(--electric-20); --d:.05s">Outcomes shipping with Agentforce.</h2>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-cell" data-anim="pop" style="--d:.20s"><div class="num"><span class="count" data-from="0" data-to="233" data-suffix="%">0</span></div><div class="label">Average ROI</div><div class="desc">IDC three-year study across the Customer 360 install base.</div></div>
+        <div class="stat-cell" data-anim="pop" style="--d:.32s"><div class="num"><span class="count" data-from="0" data-to="42" data-suffix="%">0</span></div><div class="label">Faster case resolution</div><div class="desc">Service Cloud + Agentforce, measured across Tier 1 cases.</div></div>
+        <div class="stat-cell" data-anim="pop" style="--d:.44s"><div class="num"><span class="count" data-from="0" data-to="31" data-suffix="%">0</span></div><div class="label">More pipeline</div><div class="desc">Sales reps with Sales Cloud + Agentforce SDR working their book.</div></div>
+        <div class="stat-cell" data-anim="pop" style="--d:.56s"><div class="num"><span class="count" data-from="0" data-to="9.4" data-decimals="1" data-suffix="&times;">0</span></div><div class="label">Faster builds</div><div class="desc">Time from idea to deployed agent vs. DIY copilots.</div></div>
+      </div>
+    </section>
+
+    <!-- ================ SLIDE 6 — SPLIT VALUE ================ -->
+    <section class="slide split-slide" data-slide>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <div class="copy">
+        <h2 class="t-title" data-anim="slide-l" style="color: var(--electric-20); max-width: 16ch; --d:.05s">Customer 360, finally with a brain.</h2>
+        <p class="body-1" data-anim="rise" style="margin-top: 2vh; max-width: 48ch; --d:.25s">Sales, Service, Marketing, Commerce, Data Cloud and Slack share metadata, the trust layer, and now the same agent runtime — so Agentforce sees every record, every workflow, every conversation.</p>
+        <div class="actions" data-anim="rise" style="--d:.45s">
+          <button class="btn-primary">See the platform</button>
+          <button class="btn-ghost">Read the architecture</button>
+        </div>
+      </div>
+      <div class="visual">
+        <div class="orbit-card featured pulse-glow" data-anim="slide-r" style="--d:.30s">
+          <div class="badge">AF</div>
+          <div class="meta"><div class="t">Agentforce — Service Agent</div><div class="s">Resolved 1,284 cases this week</div></div>
+          <div class="stat-mini">94%</div>
+        </div>
+        <div class="orbit-card" data-anim="slide-r" style="--d:.45s">
+          <div class="badge b1">SC</div>
+          <div class="meta"><div class="t">Sales Cloud · Pipeline</div><div class="s">12 deals nudged forward by SDR Agent</div></div>
+          <div class="stat-mini">+$2.4M</div>
+        </div>
+        <div class="orbit-card" data-anim="slide-r" style="--d:.60s">
+          <div class="badge b2">D360</div>
+          <div class="meta"><div class="t">Data 360 · Real-time profile</div><div class="s">7 sources unified, 0 ETL jobs</div></div>
+          <div class="stat-mini">3.1s</div>
+        </div>
+        <div class="orbit-card" data-anim="slide-r" style="--d:.75s">
+          <div class="badge b3">SL</div>
+          <div class="meta"><div class="t">Slack · Channel handoff</div><div class="s">Agent escalated to #cust-acme-tier1</div></div>
+          <div class="stat-mini">2m</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ SLIDE 7 — RADIAL STATS ================ -->
+    <section class="slide" data-slide>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <div class="section-head">
+        <h2 class="t-title" data-anim="slide-l" style="color: var(--electric-20); --d:.05s">Measured. Proven. Repeatable.</h2>
+      </div>
+      <div class="radials">
+        <div class="radial-card" data-anim="zoom" style="--d:.20s">
+          <div class="radial">
+            <svg viewBox="0 0 220 220">
+              <circle class="track" cx="110" cy="110" r="92"/>
+              <circle class="bar"   cx="110" cy="110" r="92" stroke-dasharray="578" stroke-dashoffset="125" data-target-offset="125" style="transition-delay: .35s;"/>
+            </svg>
+            <div class="v"><span class="count" data-from="0" data-to="79" data-suffix="%" data-delay="350">0</span></div>
+          </div>
+          <div class="desc">cases auto-resolved or summarized before a human reads them.</div>
+        </div>
+        <div class="radial-card" data-anim="zoom" style="--d:.35s">
+          <div class="radial">
+            <svg viewBox="0 0 220 220">
+              <circle class="track" cx="110" cy="110" r="92"/>
+              <circle class="bar deep" cx="110" cy="110" r="92" stroke-dasharray="578" stroke-dashoffset="289" data-target-offset="289" style="transition-delay: .50s;"/>
+            </svg>
+            <div class="v"><span class="count" data-from="0" data-to="50" data-suffix="%" data-delay="500">0</span></div>
+          </div>
+          <div class="desc">drop in pipeline-leakage with overnight SDR Agent on inbound.</div>
+        </div>
+        <div class="radial-card" data-anim="zoom" style="--d:.50s">
+          <div class="radial">
+            <svg viewBox="0 0 220 220">
+              <circle class="track" cx="110" cy="110" r="92"/>
+              <circle class="bar"   cx="110" cy="110" r="92" stroke-dasharray="578" stroke-dashoffset="38" data-target-offset="38" style="transition-delay: .65s;"/>
+            </svg>
+            <div class="v"><span class="count" data-from="0" data-to="93" data-suffix="%" data-delay="650">0</span></div>
+          </div>
+          <div class="desc">of admins pass security review on the first attempt.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ SLIDE 8 — COMPARISON ================ -->
+    <section class="slide" data-slide>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <div class="section-head">
+        <h2 class="t-title" data-anim="slide-l" style="color: var(--electric-20); --d:.05s">A platform agent — not a chat bolt-on.</h2>
+      </div>
+      <div class="compare" data-anim="zoom" style="--d:.20s">
+        <div class="compare-row head" data-anim="rise" style="--d:.30s"><div>Capability</div><div>Point AI tools</div><div class="winner">Salesforce + Agentforce</div></div>
+        <div class="compare-row" data-anim="rise" style="--d:.42s"><div class="label">Grounded in CRM data</div><div><span class="dotmark muted"></span>BYO integration</div><div class="winner"><span class="dotmark"></span>Native to Customer 360 metadata</div></div>
+        <div class="compare-row" data-anim="rise" style="--d:.52s"><div class="label">Real-time profile</div><div><span class="dotmark muted"></span>Nightly batch ETL</div><div class="winner"><span class="dotmark"></span>Data 360 zero-copy, live</div></div>
+        <div class="compare-row" data-anim="rise" style="--d:.62s"><div class="label">Trust &amp; governance</div><div><span class="dotmark muted"></span>Custom DLP policies</div><div class="winner"><span class="dotmark"></span>Trust Layer, FLS-aware, ZDR</div></div>
+        <div class="compare-row" data-anim="rise" style="--d:.72s"><div class="label">Time to first agent</div><div><span class="dotmark muted"></span>3–6 months engineering</div><div class="winner"><span class="dotmark"></span>Days with prebuilt skills</div></div>
+        <div class="compare-row" data-anim="rise" style="--d:.82s"><div class="label">ROI verified</div><div><span class="dotmark muted"></span>Anecdotal</div><div class="winner"><span class="dotmark"></span>233% three-year ROI (IDC)</div></div>
+      </div>
+    </section>
+
+    <!-- ================ SLIDE 9 — BOLD STATEMENT 2 ================ -->
+    <section class="slide deep bold-slide" data-slide>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <h2 data-words>
+        <span data-anim="rise" style="--d:.10s">Trust</span>
+        <span data-anim="rise" style="--d:.20s">isn't</span>
+        <span data-anim="rise" style="--d:.30s">a</span>
+        <span data-anim="rise" style="--d:.40s">feature.</span>
+        <span class="hi" data-anim="rise" style="--d:.62s">It's</span>
+        <span class="hi" data-anim="rise" style="--d:.72s">the</span>
+        <span class="hi" data-anim="rise" style="--d:.82s">platform.</span>
+      </h2>
+    </section>
+
+    <!-- ================ SLIDE 10 — QUOTE ================ -->
+    <section class="slide deep quote-slide" data-slide>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <blockquote data-anim="zoom" style="--d:.15s">The next ten years of work belong to teams of <span class="grad-shimmer">humans and agents</span>, working together on a single source of customer truth.</blockquote>
+      <cite data-anim="rise" style="--d:.55s"><b>Marc Benioff</b> · Chair &amp; CEO, Salesforce — Dreamforce 2025</cite>
+    </section>
+
+    <!-- ================ SLIDE 11 — CTA ================ -->
+    <section class="slide deep cta-slide" data-slide>
+      <span class="hero-orb a"></span>
+      <span class="hero-orb b"></span>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <div class="cta-grid">
+        <div>
+          <h2 data-anim="slide-l" style="--d:.10s">Build your first agent before the end of the quarter.</h2>
+          <p data-anim="rise" style="--d:.30s">Spin up a trial, point Data 360 at one source system, and ship a service triage agent into Slack — all inside a single sprint.</p>
+          <div class="actions" data-anim="rise" style="--d:.45s">
+            <button class="btn-primary">Start free trial</button>
+            <button class="btn-ghost">Talk to a specialist</button>
+          </div>
+        </div>
+        <aside class="cta-side" data-anim="slide-r" style="--d:.40s">
+          <h4>What's in the trial</h4>
+          <ul>
+            <li data-anim="rise" style="--d:.55s">Customer 360 sandbox, fully provisioned</li>
+            <li data-anim="rise" style="--d:.65s">Agentforce Service &amp; SDR Agent templates</li>
+            <li data-anim="rise" style="--d:.75s">Data 360 zero-copy connector pack</li>
+            <li data-anim="rise" style="--d:.85s">Slack workspace pre-wired to your trial org</li>
+            <li data-anim="rise" style="--d:.95s">Trust Layer policies on by default</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================ SLIDE 12 — CLOSING ================ -->
+    <section class="slide deep title-slide" data-slide>
+      <span class="hero-orb a"></span>
+      <span class="hero-orb b"></span>
+      <img class="slide-logo" src="../../assets/logos/salesforce/Salesforce.png" alt="Salesforce">
+      <div class="lockup">
+        <div class="copy">
+          <h1>
+            <span data-anim="rise" style="--d:.10s; display:block;">Thank you.</span>
+            <span class="accent grad-shimmer" data-anim="rise" style="--d:.40s; display:block;">Let's go build it.</span>
+          </h1>
+          <p class="meta" data-anim="rise" style="--d:.75s">Salesforce · The #1 Agentic CRM</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="deck-progress" id="progress"><i></i></div>
+  </div>
+</div>
+
+<div class="deck-nav">
+  <button id="prev" aria-label="Previous slide">‹</button>
+  <button id="next" aria-label="Next slide">›</button>
+</div>
+<div class="deck-counter" id="counter">1 / 12</div>
+<div class="deck-hint">← → to navigate</div>
+
+<script>
+const slides = [...document.querySelectorAll('[data-slide]')];
+const counter = document.getElementById('counter');
+const progressBar = document.querySelector('#progress > i');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+let cur = 0;
+
+// Count-up animation: ramps a number from data-from to data-to over 1.2s using ease-out cubic.
+function runCountUp(el) {
+  const from = parseFloat(el.dataset.from || '0');
+  const to   = parseFloat(el.dataset.to   || '0');
+  const decimals = parseInt(el.dataset.decimals || '0', 10);
+  const suffix   = el.dataset.suffix || '';
+  const format   = el.dataset.format || '';
+  const delay    = parseInt(el.dataset.delay || '0', 10);
+  const dur      = 1200;
+  const start    = performance.now() + delay;
+
+  function fmt(v) {
+    let s = decimals > 0 ? v.toFixed(decimals) : Math.round(v).toString();
+    if (format === 'comma') {
+      const parts = s.split('.');
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      s = parts.join('.');
+    }
+    el.innerHTML = s + suffix;
+  }
+
+  fmt(from);
+  function tick(now) {
+    if (now < start) { requestAnimationFrame(tick); return; }
+    const t = Math.min(1, (now - start) / dur);
+    const eased = 1 - Math.pow(1 - t, 3);
+    fmt(from + (to - from) * eased);
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// Run all per-slide animations when a slide becomes active
+function activateSlide(slide) {
+  // Restart any CSS animations by toggling .active in a microtask
+  // The animations are bound to .slide.active [data-anim], so removing+adding active retriggers them
+  slide.classList.remove('active');
+  void slide.offsetWidth; // force reflow
+  slide.classList.add('active');
+
+  // Count-up numbers
+  slide.querySelectorAll('.count').forEach(el => {
+    if (el.dataset.from !== undefined && el.dataset.to !== undefined) runCountUp(el);
+  });
+
+  // Radial rings: temporarily set offset to 578 (empty) then animate to target
+  slide.querySelectorAll('.radial .bar[data-target-offset]').forEach(circle => {
+    const target = circle.dataset.targetOffset;
+    circle.style.strokeDashoffset = '578';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => { circle.style.strokeDashoffset = target; });
+    });
+  });
+}
+
+function go(n) {
+  if (n < 0 || n >= slides.length || n === cur) return;
+  const direction = n > cur ? 1 : -1;
+  const leaving = slides[cur];
+  const entering = slides[n];
+
+  leaving.classList.remove('active');
+  leaving.classList.add(direction === 1 ? 'exit-left' : 'exit-right');
+  setTimeout(() => leaving.classList.remove('exit-left', 'exit-right'), 600);
+
+  cur = n;
+  // Pre-position entering slide for direction-aware entry
+  entering.classList.remove('active', 'exit-left', 'exit-right');
+  entering.classList.add(direction === 1 ? 'enter-right' : 'enter-left');
+  void entering.offsetWidth;
+  entering.classList.remove('enter-right', 'enter-left');
+  activateSlide(entering);
+
+  counter.textContent = `${cur+1} / ${slides.length}`;
+  progressBar.style.width = `${((cur+1)/slides.length)*100}%`;
+  prevBtn.disabled = cur === 0;
+  nextBtn.disabled = cur === slides.length - 1;
+}
+
+document.addEventListener('keydown', e => {
+  if (['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)) { e.preventDefault(); go(cur+1); }
+  else if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key))    { e.preventDefault(); go(cur-1); }
+  else if (e.key === 'Home') go(0);
+  else if (e.key === 'End')  go(slides.length-1);
+});
+prevBtn.addEventListener('click', () => go(cur-1));
+nextBtn.addEventListener('click', () => go(cur+1));
+
+// Initialize first slide animations
+counter.textContent = `1 / ${slides.length}`;
+progressBar.style.width = `${(1/slides.length)*100}%`;
+prevBtn.disabled = true;
+activateSlide(slides[0]);
+</script>
+</body>
+</html>
